@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tribbu Club — Canal V1</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rosa:#F2C4CE; --rosa-mid:#F5D5DC; --rosa-light:#FDF0F3; --rosa-deep:#D9899A; --rosa-dark:#B06070;
+  --negro:#1A1A1A; --negro2:#252525;
+  --texto:#2A1018; --muted:#9A7080;
+  --borde:rgba(180,100,120,0.15);
+  --verde:#1A6040; --verde-bg:rgba(26,96,64,.1); --verde-bd:rgba(26,96,64,.2);
+  --ambar:#7A4A0A; --ambar-bg:rgba(122,74,10,.09); --ambar-bd:rgba(122,74,10,.2);
+  --rojo:#802020; --rojo-bg:rgba(128,32,32,.09); --rojo-bd:rgba(128,32,32,.2);
+  --ff:'Inter',sans-serif; --ffd:'Syne',sans-serif; --ffm:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--rosa-light);color:var(--texto);font-family:var(--ff);font-size:14px;line-height:1.6;}
+.shell{max-width:1120px;margin:0 auto;padding:0 2rem 5rem;}
+
+/* HEADER NEGRO */
+header{background:var(--negro);margin:0 -2rem 2rem;padding:2.5rem 2rem 2rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center;}
+.hey{font-family:var(--ffm);font-size:10px;letter-spacing:.16em;color:var(--rosa);text-transform:uppercase;margin-bottom:.75rem;}
+header h1{font-family:var(--ffd);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.05;margin-bottom:.6rem;}
+header h1 span{color:var(--rosa);}
+.hdesc{font-size:13px;color:rgba(255,255,255,.45);max-width:520px;line-height:1.65;}
+.hstats{display:flex;gap:1.75rem;margin-top:1.25rem;flex-wrap:wrap;}
+.stat{font-size:11px;color:rgba(255,255,255,.4);}
+.stat b{display:block;font-family:var(--ffd);font-size:20px;font-weight:700;color:#fff;line-height:1;margin-bottom:1px;}
+.stat b.ac{color:var(--rosa);}
+
+/* LOGO */
+.logo-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;}
+.logo-circle{width:64px;height:64px;border-radius:50%;overflow:hidden;border:2px solid rgba(242,196,206,.25);}
+.logo-circle img{width:100%;height:100%;object-fit:cover;display:block;}
+.logo-name{font-family:var(--ffd);font-size:10px;font-weight:700;color:var(--rosa);letter-spacing:.1em;text-transform:uppercase;}
+
+/* TABS */
+.tabs{display:flex;gap:2px;background:var(--negro);border-radius:12px;padding:4px;margin-bottom:2rem;box-shadow:0 2px 12px rgba(26,26,26,.1);}
+.tabs button{flex:1;min-width:110px;padding:9px 16px;border-radius:9px;border:none;font-family:var(--ff);font-size:13px;color:rgba(255,255,255,.75);background:transparent;cursor:pointer;transition:all .2s;}
+.tabs button.on{background:var(--rosa);color:var(--negro);font-weight:600;}
+.tabs button:hover:not(.on){color:#fff;background:rgba(255,255,255,.07);}
+
+.page{display:none;animation:up .3s ease;}
+.page.on{display:block;}
+@keyframes up{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+.ey{font-family:var(--ffm);font-size:10px;letter-spacing:.14em;color:var(--rosa-dark);text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem;}
+.ey::before{content:'';width:12px;height:1px;background:var(--rosa-dark);}
+
+/* PILLS */
+.pill{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10.5px;font-weight:500;white-space:nowrap;}
+.g{background:var(--verde-bg);color:var(--verde);border:1px solid var(--verde-bd);}
+.a{background:var(--ambar-bg);color:var(--ambar);border:1px solid var(--ambar-bd);}
+.r{background:var(--rojo-bg);color:var(--rojo);border:1px solid var(--rojo-bd);}
+.b{background:rgba(26,26,26,.06);color:var(--negro2);border:1px solid rgba(26,26,26,.12);}
+
+/* DIM NAV */
+.dnav{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1rem;}
+.dbtn{padding:5px 13px;border-radius:18px;border:1px solid var(--borde);background:#fff;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s;}
+.dbtn.on{border-color:var(--negro);color:#fff;background:var(--negro);font-weight:500;}
+.dbtn:hover:not(.on){border-color:var(--negro);color:var(--negro);}
+
+.dtbar{background:#fff;border:1px solid var(--borde);border-left:3px solid var(--negro);border-radius:10px;padding:.8rem 1.1rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(26,26,26,.04);}
+.dtbar h3{font-family:var(--ffd);font-size:14px;color:var(--negro);font-weight:700;margin-bottom:.15rem;}
+.dtbar p{font-size:12px;color:var(--muted);}
+
+/* TABLE */
+.tscroll{overflow-x:auto;border-radius:12px;border:1px solid var(--borde);box-shadow:0 1px 4px rgba(26,26,26,.05);}
+table.t{width:100%;border-collapse:collapse;min-width:980px;font-size:11.5px;background:#fff;}
+.t thead th{padding:9px 10px;font-size:10px;font-weight:600;letter-spacing:.05em;border-bottom:1px solid var(--borde);text-align:center;background:var(--rosa-mid);color:var(--texto);}
+.t thead th.rl{text-align:left;color:var(--muted);font-weight:400;width:17%;background:var(--rosa-light);}
+.t tbody td{padding:8px 10px;border-bottom:1px solid rgba(26,26,26,.04);vertical-align:top;line-height:1.5;color:#5A3A45;}
+.t tbody td.rl{font-weight:500;color:var(--negro);font-size:12px;border-right:1px solid var(--borde);background:var(--rosa-light);}
+.t tbody tr:hover td{background:rgba(242,196,206,.18);}
+.t tbody tr:hover td.rl{background:var(--rosa-mid);}
+.t tbody tr:last-child td{border-bottom:none;}
+.ci{color:#4A1A80;}.cw{color:#0A5020;}.cig{color:#7A2050;}
+.ctk{color:#1A1A1A;}.cfb{color:#0A1A70;}.ctg{color:#0A3070;}
+.cln{color:#0A2060;}.cld{color:var(--rosa-dark);}
+
+/* MATRIZ */
+.mint{background:#fff;border:1px solid var(--borde);border-left:3px solid var(--negro);border-radius:10px;padding:1.1rem 1.4rem;margin-bottom:1.5rem;box-shadow:0 1px 3px rgba(26,26,26,.04);}
+.mint p{font-size:13px;color:var(--muted);line-height:1.65;}
+.mint strong{color:var(--negro);font-weight:500;}
+
+/* COL BAR — NEGRO */
+.cbar{display:grid;grid-template-columns:24px 1fr 54px repeat(8,44px);gap:3px;padding:6px 13px;background:var(--negro);border-radius:10px 10px 0 0;margin-bottom:2px;}
+.cbar .ch{font-size:10px;text-align:center;color:rgba(255,255,255,.5);font-weight:500;}
+.cbar .ch.lb{text-align:left;color:rgba(255,255,255,.35);font-weight:400;}
+
+/* CRITERIA */
+.clist{display:flex;flex-direction:column;gap:4px;margin-bottom:1.75rem;}
+.ci2{background:#fff;border:1px solid var(--borde);border-radius:9px;overflow:hidden;transition:border-color .2s;box-shadow:0 1px 3px rgba(26,26,26,.04);}
+.ci2.op{border-color:var(--negro);}
+.crow2{display:grid;grid-template-columns:24px 1fr 54px repeat(8,44px);align-items:center;gap:3px;padding:9px 13px;cursor:pointer;}
+.ci2:hover .crow2{background:var(--rosa-light);}
+.ci2.op .crow2{background:var(--rosa-mid);}
+.ctog{font-size:11px;color:var(--muted);transition:transform .2s;display:flex;align-items:center;justify-content:center;}
+.ci2.op .ctog{transform:rotate(90deg);color:var(--negro);}
+.clbl{font-size:12px;font-weight:500;color:var(--negro);}
+.clbl small{display:block;font-size:10.5px;color:var(--muted);font-weight:400;margin-top:1px;}
+.wbg{font-family:var(--ffm);font-size:10px;color:#fff;background:var(--negro);border-radius:4px;padding:2px 5px;text-align:center;font-weight:500;}
+
+/* SCORE DOTS */
+.sd{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;margin:0 auto;font-family:var(--ffm);}
+.d5{background:var(--verde-bg);color:var(--verde);border:1px solid var(--verde-bd);}
+.d4{background:rgba(26,96,64,.06);color:#2A7A5A;border:1px solid rgba(26,96,64,.15);}
+.d3{background:var(--ambar-bg);color:var(--ambar);border:1px solid var(--ambar-bd);}
+.d2{background:rgba(128,32,32,.06);color:#7A2A2A;border:1px solid rgba(128,32,32,.15);}
+.d1{background:var(--rojo-bg);color:var(--rojo);border:1px solid var(--rojo-bd);}
+
+.cbody2{display:none;padding:0 13px 14px;border-top:1px solid var(--borde);}
+.ci2.op .cbody2{display:block;}
+
+/* WHY BOX — ROSA */
+.why{background:var(--rosa-mid);border-radius:8px;padding:.8rem 1rem;margin:.75rem 0;border-left:3px solid var(--negro);font-size:12px;color:var(--texto);line-height:1.6;}
+.why strong{color:var(--negro);font-weight:600;}
+.why .src{font-family:var(--ffm);font-size:10px;color:var(--muted);margin-top:.4rem;padding-top:.4rem;border-top:1px solid rgba(26,26,26,.1);}
+
+/* CH CARDS — ROSA LIGHT */
+.chg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px;}
+.chc{background:var(--rosa-light);border-radius:8px;border:1px solid var(--borde);padding:.8rem;}
+.chh{display:flex;align-items:center;gap:7px;margin-bottom:.5rem;}
+.chn{font-size:12px;font-weight:500;color:var(--negro);flex:1;}
+.arg{font-size:11px;color:#6A4050;line-height:1.5;padding:4px 0 4px 15px;position:relative;border-bottom:1px solid rgba(26,26,26,.06);}
+.arg:last-child{border-bottom:none;}
+.arg::before{position:absolute;left:0;top:5px;font-size:10px;}
+.arg.p::before{content:"✓";color:var(--verde);}
+.arg.c::before{content:"✗";color:var(--rojo);}
+.arg.s{font-size:10px;color:var(--muted);font-style:italic;}
+.arg.s::before{content:"↗";color:var(--rosa-dark);font-style:normal;}
+
+/* TOTALS */
+.tb{margin:1.75rem 0;}
+.tlbl{font-family:var(--ffm);font-size:10px;letter-spacing:.13em;color:var(--rosa-dark);text-transform:uppercase;margin-bottom:.9rem;}
+.blist2{display:flex;flex-direction:column;gap:4px;}
+.brow2{display:grid;grid-template-columns:175px 1fr 56px;align-items:center;gap:12px;background:#fff;border-radius:9px;padding:9px 13px;border:1px solid var(--borde);transition:border-color .15s;box-shadow:0 1px 3px rgba(26,26,26,.04);}
+.brow2:hover{border-color:var(--negro2);}
+.brow2.win{border-color:var(--negro);border-width:2px;background:var(--rosa-mid);}
+.bn{font-size:12px;font-weight:500;color:var(--negro);}
+.bn small{font-size:10.5px;color:var(--muted);font-weight:400;}
+.bb{height:5px;background:rgba(26,26,26,.07);border-radius:3px;overflow:hidden;}
+.bf{height:100%;border-radius:3px;}
+.bv{font-family:var(--ffm);font-size:13px;font-weight:500;text-align:right;}
+
+/* RISK */
+.rb2{background:#fff8ee;border:1px solid var(--ambar-bd);border-radius:10px;padding:1rem 1.3rem;margin:1.5rem 0;}
+.rlbl{font-family:var(--ffm);font-size:10px;letter-spacing:.11em;color:var(--ambar);text-transform:uppercase;margin-bottom:.65rem;}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.ri{font-size:12px;color:#5A3A10;padding:5px 0 5px 17px;position:relative;line-height:1.5;}
+.ri::before{content:"⚠";position:absolute;left:0;font-size:10px;color:var(--ambar);}
+
+/* PODIUM */
+.pod{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem;}
+.pc{border-radius:12px;padding:1.25rem;border:1px solid var(--borde);background:#fff;box-shadow:0 1px 4px rgba(26,26,26,.06);}
+.pc.gd{border-color:var(--negro);border-width:2px;background:var(--negro);}
+.prk{font-family:var(--ffm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;color:var(--muted);}
+.pc.gd .prk{color:var(--rosa);}
+.pnm{font-family:var(--ffd);font-size:16px;font-weight:700;color:var(--negro);margin-bottom:.3rem;}
+.pc.gd .pnm{color:#fff;}
+.psc{font-family:var(--ffm);font-size:24px;font-weight:500;margin-bottom:.6rem;color:var(--muted);}
+.pc.gd .psc{color:var(--rosa);}
+.pds{font-size:12px;color:var(--muted);line-height:1.5;}
+.pc.gd .pds{color:rgba(255,255,255,.5);}
+
+/* REC BLOCK — NEGRO */
+.rec{background:var(--negro);border-radius:14px;padding:2rem;margin-bottom:2rem;border:2px solid var(--negro);}
+.rec h2{font-family:var(--ffd);font-size:22px;font-weight:800;color:#fff;margin-bottom:.7rem;line-height:1.1;}
+.rec h2 span{color:var(--rosa);}
+.rec>p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.75;margin-bottom:1.1rem;}
+.rec>p strong{color:#fff;}
+.rss{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:1.1rem;}
+.rs{display:flex;gap:9px;align-items:flex-start;background:rgba(255,255,255,.05);border-radius:9px;padding:11px;border:1px solid rgba(255,255,255,.07);}
+/* NÚMERO PASO = ROSA */
+.rn{width:25px;height:25px;border-radius:50%;background:var(--rosa);color:var(--negro);font-size:10px;font-weight:700;font-family:var(--ffm);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rb3{font-size:12px;color:rgba(255,255,255,.5);line-height:1.5;}
+.rb3 strong{color:#fff;font-weight:600;display:block;margin-bottom:2px;}
+
+/* ROLES */
+.rl2{background:#fff;border:1px solid var(--borde);border-radius:12px;padding:1.4rem;margin-bottom:2rem;box-shadow:0 1px 4px rgba(26,26,26,.05);}
+.rl2 h3{font-family:var(--ffd);font-size:15px;font-weight:700;color:var(--negro);margin-bottom:.9rem;}
+.rg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:7px;}
+.rc{background:var(--rosa-light);border-radius:8px;padding:.85rem;border:1px solid var(--borde);}
+.rt{font-family:var(--ffm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem;}
+.rn2{font-size:13px;font-weight:500;color:var(--negro);margin-bottom:.25rem;}
+.rd{font-size:11px;color:var(--muted);line-height:1.45;}
+
+/* DISCARD */
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:.9rem;}
+.dc{background:var(--rosa-light);border-radius:9px;border:1px solid var(--borde);padding:.9rem;}
+.dn{font-size:13px;font-weight:500;color:var(--negro);margin-bottom:.4rem;}
+.dd{font-size:12px;color:#5A4050;line-height:1.5;}
+.dd strong{color:var(--negro);font-weight:500;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--rosa-mid);}
+::-webkit-scrollbar-thumb{background:var(--rosa-deep);border-radius:2px;}
+
+@media(max-width:640px){
+  .shell{padding:0 1rem 3rem;}
+  header{grid-template-columns:1fr;padding:2rem 1rem;}
+  .logo-wrap{display:none;}
+  header h1{font-size:1.75rem;}
+  .rss,.pod,.dg,.rg,.rg2{grid-template-columns:1fr;}
+  .cbar,.crow2{grid-template-columns:20px 1fr 42px repeat(4,32px);}
+}
+/* ── ONBOARDING ── */
+.ob-tabs{display:flex;gap:3px;background:var(--negro);border-radius:10px;padding:4px;margin-bottom:1.5rem;}
+.obt{flex:1;padding:8px 12px;border-radius:8px;border:none;font-family:var(--ff-body);font-size:12px;font-weight:400;color:rgba(255,255,255,.75);background:transparent;cursor:pointer;transition:all .2s;text-align:center;line-height:1.3;}
+.obt.on{background:var(--rosa);color:var(--negro);font-weight:600;}
+.obt:hover:not(.on){color:#fff;background:rgba(255,255,255,.07);}
+.ob-view{display:none;}
+.ob-view.on{display:block;animation:up .3s ease;}
+.ob-header{margin-bottom:1.25rem;}
+.ob-title{font-size:16px;font-weight:600;color:var(--negro);margin-bottom:4px;}
+.ob-sub{font-size:12px;color:var(--texto-mid);line-height:1.55;margin-bottom:8px;}
+.ob-badge{font-family:var(--ff-mono);font-size:10px;padding:3px 10px;border-radius:20px;background:var(--negro);color:var(--rosa);letter-spacing:.04em;}
+.ob-phase{margin-bottom:6px;}
+.ob-phase-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--texto-muted);margin-bottom:8px;padding-left:2px;display:flex;align-items:center;gap:6px;}
+.ob-phase-lbl::before{content:'';width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ob-phase-lbl.ph1::before{background:var(--rosa);}
+.ob-phase-lbl.ph2::before{background:var(--rosa-dark);}
+.ob-phase-lbl.ph3::before{background:var(--negro);}
+.ob-vconn{height:20px;display:flex;align-items:center;justify-content:center;}
+.ob-vline{width:1px;height:100%;background:var(--borde);}
+.ob-row{display:flex;align-items:flex-start;gap:0;}
+.ob-hconn{width:20px;flex-shrink:0;display:flex;align-items:center;padding-top:20px;}
+.ob-hline{width:100%;height:1px;background:var(--borde);}
+.ob-step{flex:1;}
+.ob-box{width:100%;background:#fff;border:1px solid var(--borde);border-radius:9px;padding:10px 9px;text-align:center;cursor:pointer;transition:border-color .15s,box-shadow .15s;min-height:68px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
+.ob-box:hover{border-color:var(--rosa-deep);box-shadow:0 1px 4px rgba(26,26,26,.06);}
+.ob-box.start,.ob-box.end{border-radius:22px;}
+.ob-box.end{background:var(--rosa-light);}
+.ob-box.highlight{border-color:var(--negro);border-width:2px;}
+.ob-box.decision{background:var(--rosa-light);border-style:dashed;}
+.ob-box.error{background:#fff8f8;border-color:var(--rojo-bd);}
+.ob-box.act{border-color:var(--rosa-dark)!important;box-shadow:0 0 0 2px rgba(242,196,206,.35)!important;}
+.ob-icon{font-size:18px;margin-bottom:2px;}
+.ob-ttl{font-size:11px;font-weight:500;color:var(--negro);line-height:1.35;}
+.ob-dsc{font-size:10px;color:var(--texto-muted);line-height:1.3;}
+.ob-branch-row{display:flex;gap:8px;width:100%;}
+.ob-branch-item{flex:1;display:flex;flex-direction:column;align-items:center;}
+.ob-branch-conn{height:18px;display:flex;align-items:center;justify-content:center;}
+.ob-blabel{font-size:9px;font-weight:600;padding:1px 6px;border-radius:4px;}
+.ob-byes{background:var(--verde-bg);color:var(--verde);}
+.ob-bno{background:var(--rojo-bg);color:var(--rojo);}
+.ob-detail{margin-top:1.25rem;background:var(--rosa-light);border-radius:10px;padding:1rem 1.25rem;border-left:3px solid var(--rosa-dark);font-size:12px;color:var(--texto-mid);line-height:1.65;min-height:64px;}
+.ob-detail strong{color:var(--negro);font-weight:500;}
+.ob-hint{font-size:11px;color:var(--texto-muted);}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header>
+  <div>
+    <div class="hey">Tribbu Club · Q2 2026 · Track Operativa · O.1 · O.2 · O.5</div>
+    <h1>LA <span>TRIBBU</span></h1>
+    <p class="hdesc">8 canales analizados al milímetro. Cada puntuación tiene argumentos concretos, datos verificables y restricciones reales del proyecto — sin opiniones.</p>
+    <div class="hstats">
+      <div class="stat"><b>8</b>canales</div>
+      <div class="stat"><b>7</b>dimensiones</div>
+      <div class="stat"><b>55+</b>variables</div>
+      <div class="stat"><b>7</b>criterios ponderados</div>
+      <div class="stat"><b class="ac">100%</b>argumentado</div>
+    </div>
+  </div>
+
+</header>
+
+<nav class="tabs">
+  <button class="on" data-p="comp">01 · Comparativa</button>
+  <button data-p="matriz">02 · Matriz de decisión</button>
+  <button data-p="rec">03 · Recomendación</button>
+  <button data-p="onboarding">04 · Onboarding flows</button>
+</nav>
+
+<div class="page on" id="page-comp">
+  <div class="ey">In-App vs WhatsApp vs Landing vs RRSS — datos al milímetro</div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;max-width:640px;line-height:1.65;">Selecciona una dimensión. Datos objetivos, no valoraciones. La ponderación está en la siguiente pestaña.</p>
+  <div class="dnav" id="dnav"></div>
+  <div class="dtbar" id="dtbar"></div>
+  <div class="tscroll"><table class="t"><thead><tr>
+    <th class="rl">Variable</th>
+    <th class="ci">📱 In-App</th><th class="cw">💬 WhatsApp</th><th class="cig">📸 Instagram</th>
+    <th class="ctk">🎵 TikTok</th><th class="cfb">👥 Facebook</th><th class="ctg">✈️ Telegram</th>
+    <th class="cln">💼 LinkedIn</th><th class="cld">🌐 Landing+NL</th>
+  </tr></thead><tbody id="tbody"></tbody></table></div>
+</div>
+
+<div class="page" id="page-matriz">
+  <div class="ey">¿Qué canal gana y por qué? Cada puntuación tiene su argumento</div>
+  <div class="mint">
+    <p>Cada criterio tiene un <strong>peso por su impacto real en el proyecto</strong>. Puntuaciones 1-5 con argumentos concretos y fuentes verificables. Pesos derivados de: <strong>ISO 27001</strong>, <strong>Producto no puede ser cuello de botella</strong>, perfil usuario <strong>39 años</strong> y el riesgo identificado en perks <strong>(caso MGM)</strong>. Clic en cada criterio para ver el razonamiento canal por canal.</p>
+  </div>
+  <div class="cbar">
+    <div></div><div class="ch lb">Criterio</div><div class="ch lb">Peso</div>
+    <div class="ch">📱</div><div class="ch">💬</div><div class="ch">📸</div><div class="ch">🎵</div>
+    <div class="ch">👥</div><div class="ch">✈️</div><div class="ch">💼</div><div class="ch" style="color:var(--rosa)">🌐</div>
+  </div>
+  <div class="clist" id="clist"></div>
+  <div class="tb">
+    <div class="tlbl">Puntuación ponderada — de mayor a menor</div>
+    <div class="blist2" id="blist2"></div>
+  </div>
+  <div class="rb2">
+    <div class="rlbl">Riesgos independientemente del canal elegido</div>
+    <div class="rg">
+      <div class="ri">Si el contenido de la newsletter no es relevante desde el primer envío, la tasa de baja será alta y difícil de recuperar.</div>
+      <div class="ri">El onboarding de la landing tiene más fricción que WhatsApp. Cada paso extra reduce la conversión ~20-30%.</div>
+      <div class="ri">Sin baseline de KPIs antes del lanzamiento, es imposible demostrar causalidad Club → recurrencia de viajes a cierre de Q2.</div>
+      <div class="ri">Los perks pasivos (acceso automático por pertenecer) son más seguros que los activos. Empezar por pasivos reduce el riesgo de replicar el caso MGM.</div>
+      <div class="ri">El botón SSO en app (1-2 días de Producto) debe planificarse antes de arrancar el resto. Es el único punto de bloqueo real.</div>
+      <div class="ri">La decisión de landing abierta vs cerrada (token) debe tomarse antes del desarrollo. Una landing abierta permite acceso a perks a usuarios no-Tribbu.</div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-rec">
+  <div class="ey">La decisión: landing propia como canal central del Club</div>
+  <div class="pod" id="pod"></div>
+  <div class="rec">
+    <h2>La Landing + Newsletter es el canal V1 <span>para Tribbu Club</span></h2>
+    <p>La landing gana en los 5 criterios con mayor peso (75% de la ponderación total). Es el único canal que resuelve simultáneamente: datos propios bajo <strong>ISO 27001</strong>, <strong>segmentación real de perks</strong> por perfil de usuario, y <strong>métricas demostrables</strong> para justificar el Club a cierre de Q2. El resto de canales tienen roles complementarios — no son alternativas, son capas distintas.</p>
+    <div class="rss">
+      <div class="rs"><div class="rn">1</div><div class="rb3"><strong>Decisión de acceso</strong>Landing cerrada (token SSO desde app) o abierta con registro. Condiciona todo el desarrollo posterior y quién puede acceder a los perks.</div></div>
+      <div class="rs"><div class="rn">2</div><div class="rb3"><strong>Botón en app — Producto</strong>1-2 días de dev, una única vez. Botón "Tribbu Club" → WebView con token de sesión. Planificarlo antes de arrancar el resto.</div></div>
+      <div class="rs"><div class="rn">3</div><div class="rb3"><strong>Setup técnico</strong>Landing en Webflow/Framer. Email: Brevo (empresa francesa, ISO 27001, SOC2, gratis hasta 9.000 emails/día). Sincronización con DB de Tribbu para segmentación automática.</div></div>
+      <div class="rs"><div class="rn">4</div><div class="rb3"><strong>Baseline de KPIs</strong>Antes de lanzar: cerrar métricas de partida (viajes/usuario activo, recurrencia media, NPS actual). Sin baseline no hay demostración de impacto a cierre de Q2.</div></div>
+      <div class="rs"><div class="rn">5</div><div class="rb3"><strong>Seed manual de primeros miembros</strong>Invitación 1-a-1 a los fundadores del núcleo antes de cualquier comunicación masiva. Medir activación real y feedback antes de escalar.</div></div>
+      <div class="rs"><div class="rn">6</div><div class="rb3"><strong>Activar RRSS como captación</strong>Metricool para publicar en Instagram, TikTok, Facebook y LinkedIn desde un único sitio. Todo apunta a la landing. WhatsApp Broadcast opcional para notificaciones urgentes.</div></div>
+    </div>
+  </div>
+  <div class="rl2">
+    <h3 style="font-family:var(--ffd);font-size:17px;font-weight:700;color:var(--negro);margin-bottom:1rem;">Cada canal tiene su función — ninguno sustituye a la landing</h3>
+    <div class="rg2" id="rg2"></div>
+  </div>
+  <div style="background:#fff;border:1px solid var(--borde);border-radius:12px;padding:1.4rem;margin-bottom:2rem;box-shadow:0 1px 4px rgba(26,26,26,.05);">
+    <div class="ey" style="margin-bottom:.65rem;">Por qué las RRSS no son el hogar del Club — solo el megáfono</div>
+    <div class="dg" id="dg"></div>
+  </div>
+</div>
+
+<!-- PAGE 4 — ONBOARDING -->
+<div class="page" id="page-onboarding">
+  <div class="ey">Cómo entra el usuario al Club — tres escenarios posibles</div>
+
+  <div class="mint card">
+    <p>Tres flujos definidos según la decisión de acceso. <strong>Flujo A</strong> es el ideal una vez Producto implemente el botón SSO. <strong>Flujo B</strong> es la landing abierta para máxima captación. <strong>Flujo C</strong> es la landing cerrada que garantiza que solo entran usuarios reales de Tribbu. El teléfono es el único identificador — sin email como requisito. Toca cada paso para ver el detalle de qué ocurre en ese momento.</p>
+  </div>
+
+  <div class="ob-tabs">
+    <button class="obt on" data-flow="A">Flujo A · Botón en app</button>
+    <button class="obt" data-flow="B">Flujo B · Landing abierta</button>
+    <button class="obt" data-flow="C">Flujo C · Landing cerrada</button>
+  </div>
+
+  <div class="ob-view on" id="ob-A">
+    <div class="ob-header">
+      <div class="ob-title">Flujo A — El usuario toca "Tribbu Club" en la app y ya está dentro</div>
+      <div class="ob-sub">Sin fricciones, sin formularios, sin código SMS. Tribbu ya sabe quién eres. 1-2 días de dev de Producto para activar el botón — la única dependencia del flujo.</div>
+      <span class="ob-badge">Ideal · Requiere 1-2 días de Producto</span>
+    </div>
+    <div id="ob-steps-A"></div>
+    <div class="ob-detail" id="ob-detail-A"><span class="ob-hint">Toca cualquier paso para ver más detalles.</span></div>
+  </div>
+
+  <div class="ob-view" id="ob-B">
+    <div class="ob-header">
+      <div class="ob-title">Flujo B — El usuario llega desde RRSS o boca-oreja y se registra libremente</div>
+      <div class="ob-sub">Llega, ve la landing, decide unirse. Sin verificación previa. La pregunta aquí es si queremos que personas que no usan Tribbu también puedan acceder a los perks del Club.</div>
+      <span class="ob-badge">Disponible desde el día 1 · Sin Producto · Decisión pendiente: ¿abierto a no usuarios de Tribbu?</span>
+    </div>
+    <div id="ob-steps-B"></div>
+    <div class="ob-detail" id="ob-detail-B"><span class="ob-hint">Toca cualquier paso para ver más detalles.</span></div>
+  </div>
+
+  <div class="ob-view" id="ob-C">
+    <div class="ob-header">
+      <div class="ob-title">Flujo C — El usuario verifica su teléfono y la landing comprueba que es de Tribbu</div>
+      <div class="ob-sub">Introduce su teléfono → se cruza con la DB de Tribbu → si es usuario recibe un SMS → entra. Si no es usuario de Tribbu, se le redirige a la app. El Club solo es para quien ya ha apostado por compartir coche.</div>
+      <span class="ob-badge">Disponible desde el día 1 · Requiere integración con DB de Tribbu · Garantiza exclusividad real</span>
+    </div>
+    <div id="ob-steps-C"></div>
+    <div class="ob-detail" id="ob-detail-C"><span class="ob-hint">Toca cualquier paso para ver más detalles.</span></div>
+  </div>
+</div>
+
+</div>
+<script>
+const G=t=>`<span class="pill g">${t}</span>`;
+const A=t=>`<span class="pill a">${t}</span>`;
+const R=t=>`<span class="pill r">${t}</span>`;
+const B=t=>`<span class="pill b">${t}</span>`;
+function ep(s){return s.replace(/<pill ([^>]+)>(.*?)<\/pill>/g,'<span class="pill $1">$2</span>');}
+
+const dims=[
+  {id:'alcance',l:'Alcance y volumen',d:'Capacidad máxima, modelo de difusión, velocidad de crecimiento, perfil de audiencia y riesgo de interacción peer-to-peer.'},
+  {id:'tecnica',l:'Técnica y setup',d:'Tiempo hasta V1 operativo, dependencia de Producto, integraciones con CRM, push notifications y mantenimiento continuo.'},
+  {id:'datos',l:'Datos y seguridad ISO 27001',d:'Propiedad de datos, cumplimiento GDPR, compatibilidad con el perímetro ISO 27001 de Tribbu y riesgo de fuga de información.'},
+  {id:'ux',l:'Experiencia de usuario',d:'Fricción de onboarding, percepción de marca, sensación de exclusividad del Club y facilidad de acceso a perks.'},
+  {id:'operativa',l:'Operativa y costes',d:'Coste de implementación, coste mensual, personas necesarias y escalabilidad sin añadir equipo.'},
+  {id:'perks',l:'Distribución de perks',d:'Segmentación por perfil, control de acceso, tracking de uso, riesgo de fraude y distribución diferenciada por partner.'},
+  {id:'kpis',l:'Medición y KPIs',d:'Cohortes Club vs no-Club, atribución de viajes, informes para leadership y A/B testing.'},
+];
+
+const td={
+alcance:[
+  {l:'Modelo de difusión',v:['<pill g>Broadcast nativo in-app</pill>','<pill g>Broadcast Lists + Communities</pill>','<pill a>Broadcast Channels — limitado</pill>','<pill r>Feed público algorítmico</pill>','<pill a>Solo grupos, no broadcast puro</pill>','<pill g>Canales unidireccionales</pill>','<pill a>Newsletter nativa de empresa</pill>','<pill g>Newsletter = broadcast puro controlado</pill>']},
+  {l:'Capacidad máxima',v:['<pill g>Ilimitada — toda la base de Tribbu</pill>','<pill g>Broadcast: ilimitado · Communities: 5.000/grupo hasta 50 subgrupos</pill>','<pill a>Seguidores ilimitados · Broadcast Channels: hasta 250.000</pill>','<pill g>Ilimitado — sin tope técnico</pill>','<pill a>Grupos: máx 5.000 · Páginas: ilimitado</pill>','<pill g>Canales: hasta 200.000 miembros</pill>','<pill g>Seguidores de página: ilimitado</pill>','<pill g>Ilimitada — depende del plan de email</pill>']},
+  {l:'Velocidad de crecimiento inicial',v:['<pill g>Alta — 0 fricción, ya en la app</pill>','<pill g>Alta — WA instalado en el 93% de smartphones ES</pill>','<pill g>Alta — alcance orgánico inicial si hay seguidores</pill>','<pill g>Muy alta — algoritmo de descubrimiento activo</pill>','<pill a>Media-baja — declive alcance orgánico FB desde 2020</pill>','<pill r>Baja — adopción muy baja en España perfil no-tech</pill>','<pill a>Media — requiere audiencia previa en LinkedIn</pill>','<pill a>Media — requiere captación activa hacia la landing</pill>']},
+  {l:'Alcance orgánico sin paid',v:['<pill g>100% usuarios que abren la app</pill>','<pill g>~95% contactos en Broadcast</pill>','<pill a>3-15% seguidores/post — media ES 2024: 5,2%</pill>','<pill a>20-50% por vídeo — sin garantía de ser de Tribbu</pill>','<pill r>1-5% fans de página — el peor alcance de todos</pill>','<pill g>80-90% suscriptores del canal</pill>','<pill a>10-20% seguidores de página en LN</pill>','<pill a>25-40% open rate email opt-in</pill>']},
+  {l:'Fit perfil usuario 39 años',v:['<pill g>Alto — smartphone activo, apps de movilidad diarias</pill>','<pill g>Muy alto — WA: canal diario en el 95% de usuarios 35-50 años ES</pill>','<pill g>Alto — cohorte 35-45 años creció +22% en IG en 2023</pill>','<pill r>Bajo — edad media TikTok ES: 24 años, menos del 18% tiene más de 35</pill>','<pill g>Alto — 35-50 años es el núcleo de actividad en FB España</pill>','<pill r>Muy bajo — Telegram ES: nicho tech y periodismo especializado</pill>','<pill a>Alto para perfil profesional — segmento que va al trabajo en carpool</pill>','<pill a>Medio-alto — usa email diario pero WA tiene más atención</pill>']},
+  {l:'Riesgo peer-to-peer',v:['<pill g>Controlable — no es nativo, el diseño lo previene</pill>','<pill r>Alto — WA invita a responder y reenviar</pill>','<pill r>Muy alto — comentarios, DMs entre usuarios</pill>','<pill r>Máximo — contenido público, comentarios abiertos</pill>','<pill a>Medio-alto — los grupos activan conversación</pill>','<pill a>Medio — canales = sin P2P / grupos = con P2P</pill>','<pill a>Medio — comentarios en posts de empresa</pill>','<pill g>Nulo — canal unidireccional por diseño</pill>']},
+],
+tecnica:[
+  {l:'Tiempo hasta V1 operativo',v:['<pill r>8-12 semanas — sprint completo de Producto</pill>','<pill g>1-3 días — cuenta Business y primera lista</pill>','<pill g>Inmediato si la cuenta existe</pill>','<pill g>Inmediato — crear cuenta y publicar</pill>','<pill g>Inmediato — crear grupo o página</pill>','<pill g>1 día — crear canal</pill>','<pill g>Inmediato si la página existe en LN</pill>','<pill a>2-3 semanas — Webflow/Framer + email + sincronización DB</pill>']},
+  {l:'Dependencia de Producto',v:['<pill r>Total — cada cambio requiere roadmap, dev, QA y release</pill>','<pill g>Cero — gestión 100% independiente</pill>','<pill g>Cero — cualquier miembro del equipo gestiona desde día 1</pill>','<pill g>Cero — sin soporte técnico de ningún tipo</pill>','<pill g>Cero — grupo y página sin soporte técnico</pill>','<pill g>Cero — canal básico sin desarrollo</pill>','<pill g>Cero — página y newsletter por el equipo de contenido</pill>','<pill a>Mínima — solo botón SSO en app: 1-2 días, una única vez</pill>']},
+  {l:'Push notifications y tasa de apertura',v:['<pill g>Push nativa: 50-90% apertura (media apps movilidad)</pill>','<pill g>Mensaje directo: 80-95% lectura — el canal con mayor atención</pill>','<pill a>Story/post orgánico: no es notificación, aparece en feed</pill>','<pill r>Solo si el algoritmo lo muestra — sin control temporal</pill>','<pill a>Notificación de grupo: muchos la silencian en FB</pill>','<pill g>Notificación de canal: 70-85% lectura</pill>','<pill a>Notificación de post: muy baja prioridad en LN</pill>','<pill a>Email opt-in: 25-40% — sube hasta 55% con contenido relevante</pill>']},
+  {l:'Integración con CRM / base de datos',v:['<pill g>Nativa — mismo ecosistema, misma DB, cero middleware</pill>','<pill r>Solo vía middleware (Zapier, Make) — API WA Business muy limitada</pill>','<pill r>API de Meta: muy limitada, solo funciona bien via Ads</pill>','<pill r>API TikTok Business: extremadamente limitada</pill>','<pill r>API de Meta: mismas limitaciones que Instagram</pill>','<pill a>Bot API Telegram: requiere desarrollo adicional</pill>','<pill r>API LinkedIn: muy limitada para páginas de empresa</pill>','<pill g>Integración nativa con Mailchimp, Brevo, HubSpot en horas</pill>']},
+  {l:'Compatible con Metricool',v:['<pill b>No aplica — canal interno de la app</pill>','<pill a>Parcial — solo en planes avanzados con API WA Business</pill>','<pill g>Sí — nativo en todos los planes de Metricool, Buffer, Publer</pill>','<pill g>Sí — nativo en Metricool, Buffer, Publer y Hootsuite</pill>','<pill g>Sí — nativo en todos los gestores multicanal</pill>','<pill a>Parcial — soporte en algunos planes de Publer y Buffer</pill>','<pill g>Sí — nativo en Metricool, Buffer y Hootsuite</pill>','<pill g>Sí — Metricool + herramienta email completamente integradas</pill>']},
+  {l:'Mantenimiento técnico',v:['<pill r>Alto — actualizaciones app, compatibilidad OS, bugs</pill>','<pill g>Casi nulo — WhatsApp gestiona toda la infraestructura</pill>','<pill g>Nulo — Instagram gestiona toda la infraestructura</pill>','<pill g>Nulo — TikTok gestiona toda la infraestructura</pill>','<pill g>Nulo — Facebook gestiona toda la infraestructura</pill>','<pill g>Nulo — Telegram gestiona toda la infraestructura</pill>','<pill g>Nulo — LinkedIn gestiona toda la infraestructura</pill>','<pill a>Bajo — hosting + actualizaciones de Webflow/Framer (automáticas)</pill>']},
+],
+datos:[
+  {l:'Propiedad de los datos',v:['<pill g>100% Tribbu — dentro del ecosistema y servidores propios</pill>','<pill r>Meta — números de teléfono en servidores de Meta/WhatsApp Inc.</pill>','<pill r>Meta — todos los datos de comportamiento en servidores de Meta</pill>','<pill r>ByteDance (China) — máximo riesgo de transferencia fuera de la UE</pill>','<pill r>Meta — mismo problema exacto que Instagram y WhatsApp</pill>','<pill a>Telegram Ltd (Dubai) — fuera de regulación europea, sin DPA clara</pill>','<pill r>Microsoft LinkedIn (EEUU) — datos en servidores de Microsoft</pill>','<pill g>100% Tribbu — base de datos propia, hosting bajo DPA propio</pill>']},
+  {l:'Compatibilidad ISO 27001',v:['<pill g>Total — ya dentro del perímetro certificado de Tribbu</pill>','<pill r>Conflicto directo — datos salen del perímetro hacia Meta (Annex A.15)</pill>','<pill r>Conflicto directo — misma infraestructura Meta</pill>','<pill r>Conflicto máximo — ByteDance, sin adecuación UE para China</pill>','<pill r>Conflicto directo — infraestructura Meta</pill>','<pill a>Gris — Telegram sin ISO ni DPA conforme GDPR</pill>','<pill r>Conflicto — datos quedan en el ecosistema de Microsoft</pill>','<pill g>Total — hosting elegido con ISO 27001 propio (ej. Brevo, AWS Frankfurt)</pill>']},
+  {l:'Cumplimiento GDPR',v:['<pill g>Nativo — ya gestionado en la app de Tribbu</pill>','<pill r>Riesgo real — Meta multada con 1.200M€ por el DPC irlandés (Mayo 2023)</pill>','<pill r>Riesgo real — mismo ecosistema Meta</pill>','<pill r>Muy alto — transferencia datos EU a China sin adecuación: ilegal</pill>','<pill r>Riesgo real — Meta</pill>','<pill a>Dudoso — sede en Dubai (EAU), sin Binding Corporate Rules publicadas</pill>','<pill r>Riesgo medio — Microsoft bajo jurisdicción EEUU</pill>','<pill g>Controlado — tú defines los términos. Brevo: empresa francesa, DPA disponible</pill>']},
+  {l:'Acceso usuarios no-Tribbu a perks',v:['<pill g>Imposible — requiere login activo en la app</pill>','<pill r>Posible — cualquier contacto puede reenviar el mensaje con el link</pill>','<pill r>Muy posible — contenido público, accesible desde cualquier buscador</pill>','<pill r>Público total — cualquier persona en internet puede ver los links</pill>','<pill a>Controlable — grupo privado con aprobación manual</pill>','<pill a>Controlable — canal privado con link de invitación</pill>','<pill r>Público — posts de empresa visibles para todos los usuarios de LN</pill>','<pill g>Configurable — landing cerrada (token) o abierta según decisión</pill>']},
+  {l:'Riesgo regulatorio futuro',v:['<pill g>Ninguno — plataforma propia bajo control legal total</pill>','<pill a>Medio — Meta ha cambiado políticas WA Business 3 veces en 2 años</pill>','<pill a>Medio — Meta bajo escrutinio continuo de la Comisión Europea</pill>','<pill r>Alto — TikTok prohibido en dispositivos institucionales EU (Marzo 2023)</pill>','<pill a>Medio — Meta bajo el mismo escrutinio que Instagram</pill>','<pill a>Medio-bajo — caso Durov (2024) genera incertidumbre</pill>','<pill a>Medio — Microsoft bajo escrutinio por LN y modelos de IA</pill>','<pill g>Muy bajo — cambiar de proveedor email tarda menos de 1 día</pill>']},
+],
+ux:[
+  {l:'Fricción de onboarding',v:['<pill g>Cero — 1 tap en el botón Tribbu Club dentro de la app</pill>','<pill a>Baja — dar número y confirmar suscripción al canal</pill>','<pill a>Baja — seguir la cuenta o unirse al Broadcast Channel</pill>','<pill g>Mínima — seguir la cuenta con 1 tap</pill>','<pill a>Baja — unirse al grupo con aprobación del admin</pill>','<pill r>Alta — instalar una app nueva que el usuario no tiene</pill>','<pill a>Media — tener cuenta de LN activa y seguir la página</pill>','<pill a>Media — registrarse, confirmar email, explorar perks</pill>']},
+  {l:'Sensación de exclusividad',v:['<pill g>Muy alta — dentro de la propia app, funcionalidad del producto</pill>','<pill a>Media — igual percepción que el grupo de vecinos o del colegio</pill>','<pill r>Baja — contenido público que cualquiera puede seguir</pill>','<pill r>Muy baja — TikTok es entretenimiento masivo, opuesto a exclusividad</pill>','<pill a>Media si el grupo es privado y curado</pill>','<pill a>Media — canal privado transmite cierta exclusividad técnica</pill>','<pill a>Media — newsletter LN tiene exclusividad si la audiencia es de calidad</pill>','<pill g>Alta — landing con acceso controlado, diseño 100% de Tribbu Club</pill>']},
+  {l:'Percepción de marca',v:['<pill g>Premium e integrado — coherente con el producto, refuerza la app</pill>','<pill a>Cercana y directa — pero informal, no transmite exclusividad de marca</pill>','<pill a>Visual y moderna — encaja con la identidad si el contenido es bueno</pill>','<pill a>Joven y viral — no encaja con 39 años ni con recuperar confianza</pill>','<pill a>Funcional — percepción de FB en 2026 es anticuada</pill>','<pill r>Técnica y de nicho — asociada a privacidad extrema, no a estilo de vida</pill>','<pill a>Profesional y rígida — demasiado corporativo para los valores de Tribbu</pill>','<pill g>Profesional y exclusiva — diseño propio, tono 100% controlado</pill>']},
+  {l:'Acceso a perks',v:['<pill g>1 tap — directísimo desde la sección del Club en la app</pill>','<pill r>Link en el mensaje — el usuario sale de WA para ir al perk</pill>','<pill r>Link en bio o Story — sale de Instagram</pill>','<pill r>Link en bio — muy difícil de encontrar</pill>','<pill a>Link en post del grupo — hay que buscar el post correcto</pill>','<pill a>Link en el mensaje del canal — razonable</pill>','<pill a>Link en newsletter o post — requiere salir de LN</pill>','<pill g>Sección dedicada en landing con todos los perks activos por perfil</pill>']},
+],
+operativa:[
+  {l:'Coste de implementación V1',v:['<pill r>Alto — sprint de Producto: 6-10 semanas con QA</pill>','<pill g>Cero — cuenta WA Business gratuita, sin coste técnico</pill>','<pill g>Cero — si la cuenta de empresa existe</pill>','<pill g>Cero — crear cuenta TikTok Business</pill>','<pill g>Cero — crear grupo o página de empresa</pill>','<pill g>Cero — crear canal de Telegram</pill>','<pill g>Cero — si la página existe en LN</pill>','<pill a>Bajo — Webflow (~25€/mes) o Framer (~15€/mes) + Brevo (gratis hasta 9.000 emails/día)</pill>']},
+  {l:'Coste mensual mantenimiento',v:['<pill a>Incluido en costes de la app — no incremental</pill>','<pill g>Gratis para Broadcast básico · API: variable según volumen</pill>','<pill g>Gratis — publicación orgánica</pill>','<pill g>Gratis — publicación orgánica</pill>','<pill g>Gratis — gestión de grupos y páginas</pill>','<pill g>Gratis — canales básicos</pill>','<pill g>Gratis — página y newsletter nativa</pill>','<pill a>15-150€/mes según volumen — Brevo gratis hasta 9k/día</pill>']},
+  {l:'Personas para gestionar',v:['<pill a>1 de Producto + 1 de contenido — dependencia recurrente</pill>','<pill r>1-2 personas dedicadas a moderar, responder y actualizar listas manuales</pill>','<pill a>1 community manager para contenido y Broadcast Channels</pill>','<pill a>1 creador de vídeo dedicado — producción constante</pill>','<pill a>1 community manager para aprobar miembros y moderar</pill>','<pill a>1 persona de contenido para publicar en el canal</pill>','<pill a>1 persona de contenido para newsletter LN y posts</pill>','<pill g>1 persona de contenido para newsletter y landing — sin moderación reactiva</pill>']},
+  {l:'Escalabilidad sin añadir equipo',v:['<pill g>Alta una vez desarrollado — push llega a 1M igual que a 100</pill>','<pill r>Baja — cada 500 usuarios nuevos aumenta la carga proporcional</pill>','<pill a>Media — contenido escala bien, gestión de DMs no</pill>','<pill g>Alta — TikTok escala orgánicamente</pill>','<pill a>Media — el grupo escala mal por la moderación</pill>','<pill g>Alta — el canal unidireccional escala perfectamente</pill>','<pill a>Media — newsletter escala bien, crecimiento en LN es lento</pill>','<pill g>Muy alta — misma newsletter para 100 o 10.000 usuarios</pill>']},
+  {l:'Riesgo dependencia de plataforma',v:['<pill g>Ninguno — es vuestra plataforma</pill>','<pill r>Muy alto — Meta ha cambiado políticas WA Business 3 veces en 2 años</pill>','<pill r>Muy alto — Meta puede cambiar Broadcast Channels sin aviso</pill>','<pill r>Máximo — TikTok bajo investigación activa en la UE</pill>','<pill r>Muy alto — Meta, mismo riesgo que Instagram y WA</pill>','<pill a>Medio — incertidumbre tras el caso Durov (2024)</pill>','<pill a>Medio — Microsoft puede cambiar condiciones de LN Business</pill>','<pill g>Muy bajo — cambiar de proveedor email tarda menos de 1 día</pill>']},
+],
+perks:[
+  {l:'Segmentación por perfil',v:['<pill g>Perfecta — app tiene todos los datos: conductor/pasajero, zona, edad, frecuencia</pill>','<pill r>Imposible — Broadcast = mismo mensaje a todos. Listas manuales: inviables a escala</pill>','<pill r>Imposible — mismo contenido a todos los seguidores</pill>','<pill r>Imposible — feed público, igual para todo el mundo</pill>','<pill r>Imposible — el mismo post lo ven todos los miembros</pill>','<pill r>Imposible en canales básicos — requeriría bots custom</pill>','<pill r>Imposible de forma nativa — solo en Ads de pago</pill>','<pill g>Perfecta — listas segmentadas en Brevo sincronizadas con DB de Tribbu</pill>']},
+  {l:'Control de acceso al perk',v:['<pill g>Total — autenticado en la app, solo usuarios reales</pill>','<pill r>Ninguno — cualquier contacto puede reenviar el link del perk</pill>','<pill r>Ninguno — contenido público e indexable</pill>','<pill r>Ninguno — público para cualquier persona en internet</pill>','<pill a>Parcial — grupo privado limita quien entra, pero los links se comparten</pill>','<pill a>Parcial — canal privado, pero el contenido puede extraerse</pill>','<pill r>Ninguno — posts públicos de empresa</pill>','<pill g>Total — landing cerrada con token individual vinculado a cuenta de Tribbu</pill>']},
+  {l:'Tracking de uso de cada perk',v:['<pill g>Nativo — cada clic y conversión en analytics con user ID</pill>','<pill r>Imposible — WA no ofrece métricas de clics ni comportamiento post-mensaje</pill>','<pill r>Muy limitado — solo clics en link bio o Stories</pill>','<pill r>Imposible — TikTok no permite tracking de usuarios específicos</pill>','<pill r>Imposible — FB Insights solo da datos agregados</pill>','<pill r>Imposible sin desarrollo custom</pill>','<pill r>Imposible de forma nativa</pill>','<pill g>Completo — UTMs + pixel en landing + integración con DB de Tribbu</pill>']},
+  {l:'Distribución diferenciada por partner',v:['<pill g>Sí — TaxDown a +23 años, Telpark e ITV a conductores activos, Revolut a todos</pill>','<pill r>No — técnicamente imposible sin gestión manual inviable</pill>','<pill r>No — mismo contenido a todos los seguidores</pill>','<pill r>No — mismo contenido</pill>','<pill r>No — mismo post a todos los miembros</pill>','<pill r>No en canales básicos — requeriría múltiples canales o bots</pill>','<pill r>No de forma nativa — solo con Ads de pago en LN</pill>','<pill g>Sí — newsletter para conductores con Telpark/ITV, otra para +23 años con TaxDown</pill>']},
+  {l:'Riesgo de fraude en perks',v:['<pill g>Muy bajo — autenticado, imposible abusar sin cuenta real</pill>','<pill r>Alto — links reenviables libremente a miles de personas</pill>','<pill r>Muy alto — links públicos accesibles desde cualquier buscador</pill>','<pill r>Muy alto — contenido público e indexable</pill>','<pill a>Medio — grupo privado limita el acceso inicial</pill>','<pill a>Medio — canal privado, pero el contenido puede extraerse</pill>','<pill r>Muy alto — posts públicos indexables</pill>','<pill g>Bajo — token individual, links pueden llevar user ID para detectar anomalías</pill>']},
+],
+kpis:[
+  {l:'Cohortes Club vs no-Club',v:['<pill g>Sí y trivialmente — misma DB, es una query directa</pill>','<pill r>Imposible — no hay forma de cruzar datos WA con DB de viajes</pill>','<pill r>Imposible — datos IG no cruzables con datos internos</pill>','<pill r>Imposible — mismo problema</pill>','<pill r>Imposible — FB no ofrece datos individuales cruzables</pill>','<pill r>Imposible sin desarrollo custom</pill>','<pill r>Imposible de forma nativa en LN</pill>','<pill g>Sí — email como identificador único, user ID del Club cruzado con DB de Tribbu</pill>']},
+  {l:'Atribución de viajes al Club',v:['<pill g>Directa — usuario en sesión activa, se registran los viajes post-Club</pill>','<pill r>Ninguna — imposible saber si el usuario hizo más viajes</pill>','<pill r>Ninguna — ningún dato de comportamiento post-contenido</pill>','<pill r>Ninguna</pill>','<pill r>Ninguna</pill>','<pill r>Ninguna sin desarrollo custom</pill>','<pill r>Ninguna</pill>','<pill a>Indirecta — vía UTMs en links de newsletter + pixel de conversión en landing</pill>']},
+  {l:'Tasa de apertura',v:['<pill g>Push: 50-90% (media sector apps movilidad)</pill>','<pill g>Lectura: 80-95% — el canal con mayor atención de todos</pill>','<pill a>Reach orgánico: 3-15% seguidores (media IG 2024: 5,2%)</pill>','<pill a>Reach vídeo: 20-50% — no son necesariamente miembros del Club</pill>','<pill a>Reach por post en página: 1-5% fans — el peor de todos</pill>','<pill g>Lectura en canal: 70-85% de suscriptores</pill>','<pill a>Reach por post en LN: 10-20% seguidores</pill>','<pill a>Open rate email opt-in: 25-40% — sube hasta 55% con buena segmentación</pill>']},
+  {l:'A/B testing',v:['<pill g>Sí — con herramienta propia de analytics, totalmente configurable</pill>','<pill r>No — WA no ofrece A/B testing para Broadcast</pill>','<pill a>Sí en Meta Ads — no en publicación orgánica</pill>','<pill r>No disponible en publicación orgánica</pill>','<pill a>Sí en Meta Ads — no en publicación orgánica</pill>','<pill r>No disponible en canales básicos</pill>','<pill a>A/B testing solo en Ads de LN, no en publicación orgánica</pill>','<pill g>Sí — nativo en Brevo, Mailchimp y todas las herramientas profesionales</pill>']},
+  {l:'Informes automáticos para leadership',v:['<pill a>Posible pero requiere desarrollo adicional</pill>','<pill r>No existen — WA Business no genera informes ni dashboards</pill>','<pill a>Meta Business Suite: engagement disponible pero no cruzable con KPIs</pill>','<pill a>TikTok Analytics: básicos, no vinculables a KPIs de Tribbu</pill>','<pill a>Meta Business Suite: mismas limitaciones que IG</pill>','<pill r>No existen informes automáticos en canales básicos</pill>','<pill a>LinkedIn Analytics: CSV básico</pill>','<pill g>Sí — Brevo/Mailchimp + Metricool generan reportes automáticos exportables</pill>']},
+  {l:'Medir impacto en recurrencia de viajes',v:['<pill g>Sí — datos in-app directamente cruzables con actividad del Club</pill>','<pill r>No — imposible correlacionar actividad WA con viajes en la app</pill>','<pill r>No — mismo problema</pill>','<pill r>No</pill>','<pill r>No</pill>','<pill r>No</pill>','<pill r>No</pill>','<pill g>Sí — integración Brevo + DB de Tribbu para medir recurrencia Club vs no-Club</pill>']},
+],
+};
+
+const crit=[
+  {id:'datos',l:'Control de datos y seguridad ISO 27001',d:'Propiedad de datos, GDPR, perímetro ISO 27001',w:15,
+   sc:{inapp:5,wa:1,ig:1,tk:1,fb:1,tg:2,ln:1,land:5},
+   why:'<strong>Peso 15%.</strong> Tribbu tiene certificación ISO 27001. El Annex A.15 exige que los proveedores externos tengan controles equivalentes. El Annex A.8 exige control de acceso y trazabilidad. Esta no es una preferencia: es un requisito de certificación que limita directamente qué canales son elegibles. <span class="src">Fuente: ISO/IEC 27001:2022 Annex A.8 y A.15 · DPC Ireland Mayo 2023 (multa Meta 1.200M€)</span>',
+   args:{
+    inapp:[{t:'p',s:'Los datos nunca salen del ecosistema de Tribbu — misma DB, mismo perímetro ISO 27001 ya certificado.'},{t:'p',s:'No hay transferencia a terceros. La interacción del usuario queda en los servidores propios.'},{t:'s',s:'ISO 27001 Annex A.8: el activo de información permanece bajo control directo de Tribbu. No requiere DPA adicional.'}],
+    wa:[{t:'c',s:'Los números de teléfono quedan en servidores de Meta (EEUU) bajo condiciones de WhatsApp Inc., fuera del perímetro de Tribbu.'},{t:'c',s:'Meta fue multada con 1.200M€ por el DPC irlandés en Mayo 2023 por transferencia ilegal de datos a EEUU bajo el RGPD.'},{t:'c',s:'WhatsApp Business API no ofrece un DPA suficiente para cumplir con ISO 27001 Annex A.15.'},{t:'s',s:'Fuente: DPC Ireland, Mayo 2023 · EDPB Guidelines 05/2021.'}],
+    ig:[{t:'c',s:'Meta controla todos los datos. Las interacciones en Instagram quedan en servidores de Meta para uso publicitario.'},{t:'c',s:'Instagram no permite exportar datos de audiencia con granularidad suficiente para una auditoría ISO 27001.'},{t:'s',s:'Fuente: Meta Privacy Policy (2024) — Meta usa datos de IG para modelos de IA y targeting. Sin opt-out para cuentas de empresa.'}],
+    tk:[{t:'c',s:'TikTok es propiedad de ByteDance (China). La UE no ha concedido adecuación a China — transferencia de datos ilegal sin salvaguardas adicionales.'},{t:'c',s:'La Comisión Europea prohibió TikTok en dispositivos corporativos en Marzo 2023.'},{t:'s',s:'Fuente: Decisión Comisión Europea (Marzo 2023) · CJEU — Schrems II.'}],
+    fb:[{t:'c',s:'Mismo ecosistema Meta que Instagram y WA — mismos servidores, mismos riesgos, misma imposibilidad de DPA conforme con ISO 27001 Annex A.15.'},{t:'s',s:'Fuente: Meta Business Tools Terms (2024).'}],
+    tg:[{t:'c',s:'Telegram Ltd (Dubai) no está sujeto a regulación europea directa. No publica certificaciones ISO ni SOC2.'},{t:'c',s:'En Agosto 2024, el fundador de Telegram fue detenido en Francia — incertidumbre legal activa sobre la plataforma.'},{t:'p',s:'A diferencia de Meta, Telegram no monetiza datos con publicidad. Pero la falta de DPA conforme sigue siendo un problema.'},{t:'s',s:'Fuente: Reuters, Agosto 2024.'}],
+    ln:[{t:'c',s:'LinkedIn es propiedad de Microsoft (EEUU). Los datos de tus usuarios quedan en el ecosistema de Microsoft.'},{t:'c',s:'No hay posibilidad de auditoría bajo el perímetro de seguridad de Tribbu.'},{t:'s',s:'Fuente: LinkedIn Privacy Policy (2024).'}],
+    land:[{t:'p',s:'Hosting en AWS Frankfurt, GCP Bruselas o Brevo (Francia) — todos con ISO 27001 en región UE. Los datos nunca salen de la jurisdicción europea.'},{t:'p',s:'Tú defines el DPA. Brevo: empresa francesa, ISO 27001, SOC2 Type II, plenamente conforme con RGPD.'},{t:'p',s:'La base de datos de miembros es 100% de Tribbu. Se conecta al CRM existente sin transferencia a terceros.'},{t:'s',s:'Fuente: Brevo Trust Center — ISO 27001, SOC2 Type II, RGPD, servidores en la UE. DPA disponible y auditado.'}],
+   }},
+  {id:'perks',l:'Distribución segmentada de perks',d:'Enviar el perk correcto al usuario correcto según conductor, pasajero, edad, zona',w:15,
+   sc:{inapp:5,wa:1,ig:1,tk:1,fb:1,tg:1,ln:1,land:5},
+   why:'<strong>Peso 15%.</strong> El plan de Tribbu Club tiene 5 partners con distribución diferenciada: <strong>TaxDown para +23 años</strong>, <strong>Telpark e ITV para conductores activos</strong>, Revolut para adquisición y Better transversal. Sin segmentación real, los perks llegan al segmento equivocado. El proyecto ya identificó este riesgo en el caso MGM. Un perk enviado al segmento equivocado es peor que no enviarlo. <span class="src">Referencia del proyecto (Notion): "TRIBBU perks V1: 5 partnerships con distribución segmentada por tipo de usuario"</span>',
+   args:{
+    inapp:[{t:'p',s:'La app ya tiene todos los datos: conductor/pasajero, frecuencia de viajes, zona, edad. Segmentación automática e inmediata.'},{t:'p',s:'Puede enviar TaxDown solo a +23 años y Telpark solo a conductores activos sin ningún trabajo manual.'},{t:'s',s:'Referencia del proyecto: "distribución segmentada por tipo de usuario" — solo ejecutable con datos propios de comportamiento.'}],
+    wa:[{t:'c',s:'WhatsApp Broadcast envía el mismo mensaje a todos los contactos. No existe segmentación nativa por perfil bajo ningún concepto.'},{t:'c',s:'Crear listas separadas por segmento requiere: exportar usuarios de la DB, crear manualmente las listas en WA Business y actualizarlas cuando cambia el perfil. Inviable a escala.'},{t:'c',s:'Con 500+ usuarios, la gestión manual de listas segmentadas requiere al menos 1 persona a tiempo parcial adicional.'},{t:'s',s:'Referencia del proyecto: el miedo es "que no le podamos dar una buena experiencia al usuario". WA sin segmentación garantiza exactamente ese problema.'}],
+    ig:[{t:'c',s:'Instagram no permite mensajes privados diferenciados a segmentos de seguidores. El contenido orgánico va a todos por igual.'},{t:'s',s:'Fuente: Meta for Developers (2024) — la API de IG no permite segmentación de mensajes fuera de Ads de pago.'}],
+    tk:[{t:'c',s:'TikTok es un feed público. No existe ningún mecanismo para enviar perks diferenciados.'},{t:'c',s:'Cualquier perk publicado en TikTok es visible para cualquier persona en internet.'}],
+    fb:[{t:'c',s:'Facebook Groups permite posts pero no mensajes privados segmentados. Todos los miembros ven el mismo contenido.'},{t:'c',s:'No hay mecanismo para cruzar los datos de comportamiento de Tribbu con la pertenencia al grupo.'}],
+    tg:[{t:'c',s:'Los canales de Telegram no son segmentables: el mismo mensaje a todos los suscriptores sin excepción.'},{t:'c',s:'Crear múltiples canales por segmento multiplica la complejidad y genera confusión en el usuario.'}],
+    ln:[{t:'c',s:'La newsletter de LN llega a todos los suscriptores por igual. No hay segmentación disponible en el plan orgánico.'},{t:'c',s:'El perfil de LN no contiene los datos relevantes: conductor/pasajero, frecuencia de viajes, zona.'}],
+    land:[{t:'p',s:'Brevo permite segmentos automáticos basados en atributos sincronizados desde la DB de Tribbu vía API. Sin intervención manual, en tiempo real.'},{t:'p',s:'TaxDown solo a +23 años. Telpark e ITV solo a conductores activos. Revolut a todos. Completamente automático.'},{t:'p',s:'Cada segmento tiene tracking propio: quién abrió el email, visitó el perk y lo canjeó.'},{t:'s',s:'Fuente: Brevo Segmentation API Docs — segmentación por cualquier atributo personalizado sincronizado desde DB externa.'}],
+   }},
+  {id:'velocidad',l:'Velocidad de implementación V1',d:'Tiempo hasta canal operativo sin bloquear a Producto',w:14,
+   sc:{inapp:1,wa:5,ig:5,tk:5,fb:5,tg:5,ln:5,land:4},
+   why:'<strong>Peso 15%.</strong> El proyecto tiene la restricción explícita de no bloquear a Producto. Cualquier canal que requiera más de 3-4 semanas o dependa de Producto para arrancar es incompatible con el objetivo de Q2. In-App puntúa 1 no porque sea un canal malo — sino porque es incompatible con las restricciones de recursos actuales. <span class="src">Referencia literal del proyecto: "queremos que producto no sea cuello de botella y tirar adelante con nuestros propios recursos"</span>',
+   args:{
+    inapp:[{t:'c',s:'Desarrollar una sección nativa requiere un sprint completo de Producto. El proyecto establece explícitamente que Producto no puede ser cuello de botella.'},{t:'c',s:'Estimación realista para una funcionalidad in-app mínima: 6-10 semanas con QA. Incompatible con las restricciones actuales.'},{t:'s',s:'Referencia literal del proyecto: "queremos que producto no sea cuello de botella".'}],
+    wa:[{t:'p',s:'Una cuenta de WA Business se crea en minutos. La primera lista de Broadcast puede configurarse el mismo día.'},{t:'p',s:'Cualquier miembro del equipo puede gestionar WA Business de forma autónoma desde el primer día.'}],
+    ig:[{t:'p',s:'Si Tribbu ya tiene cuenta de Instagram, los Broadcast Channels se activan en segundos.'},{t:'p',s:'La publicación de contenido orgánico puede empezar el mismo día de la decisión.'}],
+    tk:[{t:'p',s:'Crear una cuenta de TikTok Business y publicar el primer contenido tarda menos de 1 hora.'},{t:'c',s:'Generar contenido de calidad para TikTok (vídeo corto bien editado) requiere tiempo de producción real.'}],
+    fb:[{t:'p',s:'Crear un grupo privado o página de empresa tarda minutos.'},{t:'c',s:'El alcance orgánico en FB (1-5%) hace que el impacto real tarde semanas en ser visible.'}],
+    tg:[{t:'p',s:'Crear un canal de Telegram tarda menos de 5 minutos.'},{t:'c',s:'El tiempo hasta masa crítica de suscriptores en España es largo por la baja adopción.'}],
+    ln:[{t:'p',s:'Si existe página de empresa, la newsletter nativa se activa en segundos.'},{t:'c',s:'Construir una audiencia en LN desde cero requiere semanas de publicación constante.'}],
+    land:[{t:'p',s:'Con Webflow o Framer, una landing con registro, acceso por token y sección de perks puede estar operativa en 2-3 semanas sin necesidad de Producto.'},{t:'p',s:'La integración con Brevo es configuración pura, no desarrollo: 1-2 días. La sincronización con DB vía API: 2-3 días adicionales.'},{t:'c',s:'No es tan inmediata como RRSS (1-3 días) pero cabe dentro de los plazos del proyecto si se arranca pronto.'},{t:'s',s:'La implementación del canal está asignada al equipo operativo, no a Producto — confirma que la landing es la opción autónoma.'}],
+   }},
+  {id:'producto',l:'Independencia de Producto',d:'No bloquear el roadmap — restricción explícita acordada para Q2',w:14,
+   sc:{inapp:1,wa:5,ig:5,tk:5,fb:5,tg:5,ln:5,land:5},
+   why:'<strong>Peso 15%.</strong> Está explícitamente documentado en el brief del proyecto que Producto no puede ser el cuello de botella en Q2. Es una restricción de recursos acordada y documentada en Notion. Cualquier canal que requiera desarrollo de Producto para funcionar o iterar puntúa 1. La solución puente del botón SSO (1-2 días de dev, solo una vez) es la excepción que hace que la landing sea autónoma. <span class="src">Referencia literal: "ahora mismo vamos a intentar que producto no sea cuello de botella y tirar adelante con nuestros propios recursos"</span>',
+   args:{
+    inapp:[{t:'c',s:'Cualquier cambio en la app — añadir sección, actualizar lógica de perks, modificar diseño — requiere pasar por roadmap, estimación, dev, QA y release en stores.'},{t:'c',s:'Necesitar a Producto para cada iteración del canal es exactamente el escenario que el proyecto quiere evitar.'},{t:'s',s:'Referencia del proyecto: la dependencia de Producto es el motivo principal por el que el in-app nativo no es viable en Q2.'}],
+    wa:[{t:'p',s:'El equipo puede crear, gestionar y evolucionar el canal de WA sin ningún soporte de Producto en ningún momento.'}],
+    ig:[{t:'p',s:'Completamente independiente. Publicación, Broadcast Channels, análisis: todo desde Instagram Business sin desarrollo técnico.'}],
+    tk:[{t:'p',s:'Completamente independiente. TikTok Business no requiere ninguna intervención de Producto.'}],
+    fb:[{t:'p',s:'Completamente independiente. Grupos y páginas se crean y gestionan sin soporte técnico de Producto.'}],
+    tg:[{t:'p',s:'El canal básico de Telegram es completamente independiente de Producto.'}],
+    ln:[{t:'p',s:'Completamente independiente. La newsletter nativa y los posts los gestiona el equipo de contenido.'}],
+    land:[{t:'p',s:'Con Webflow o Framer, la landing es 100% independiente de Producto. El equipo la construye, actualiza y mejora sin sprints.'},{t:'p',s:'La única pieza que necesita Producto es el botón SSO (1-2 días, una única vez). Después la landing es completamente autónoma.'},{t:'s',s:'La implementación técnica está asignada al Track Operativa, NO a Producto — confirma que la landing es la opción diseñada para ser autónoma.'}],
+   }},
+  {id:'kpis',l:'Medición y KPIs demostrables',d:'Cohortes Club vs no-Club, atribución de viajes, informes para leadership',w:14,
+   sc:{inapp:5,wa:1,ig:1,tk:1,fb:1,tg:1,ln:1,land:5},
+   why:'<strong>Peso 14%.</strong> El proyecto define explícitamente como criterio de éxito: <strong>"Tracking funcional: sabemos medir cohortes Club vs no-Club"</strong>. Sin esta capacidad, es imposible demostrar el ROI del Club a leadership a cierre de Q2 ni justificar la inversión en Q3. <span class="src">Referencia del proyecto: "Recurrencia de viajes: los users del club aumentan sus viajes un +X% en los 2 meses post-activación"</span>',
+   args:{
+    inapp:[{t:'p',s:'Al estar en la misma app, se cruza directamente el comportamiento como miembro del Club con su actividad de viajes. Las cohortes son una query directa en la DB.'},{t:'p',s:'Cada interacción (ver un perk, canjear un descuento) queda registrada con user ID y vinculada al comportamiento de viajes.'},{t:'s',s:'Referencia del proyecto: "Tracking funcional: sabemos medir cohortes Club vs no-Club".'}],
+    wa:[{t:'c',s:'WhatsApp no ofrece métricas de apertura, clic ni conversión para Broadcast. Solo el número de mensajes entregados vs. leídos a nivel agregado.'},{t:'c',s:'Sin datos individuales post-mensaje, las cohortes Club vs no-Club son imposibles de construir.'}],
+    ig:[{t:'c',s:'Instagram Insights ofrece métricas agregadas de la cuenta, no individuales de cada usuario.'},{t:'c',s:'Imposible cruzar datos de Instagram con el comportamiento de viajes de un usuario específico en la DB.'}],
+    tk:[{t:'c',s:'TikTok Analytics mide vistas y likes a nivel de contenido, no de usuario individual. Imposible construir cohortes.'}],
+    fb:[{t:'c',s:'Facebook Insights da datos agregados de la página o grupo. Sin identificador compartido con la DB de Tribbu, las cohortes son imposibles.'}],
+    tg:[{t:'c',s:'Telegram ofrece visualizaciones por mensaje — dato agregado de contenido, no de usuario individual identificable.'}],
+    ln:[{t:'c',s:'LinkedIn Analytics da datos a nivel de página, no individuales ni cruzables con ninguna DB externa.'}],
+    land:[{t:'p',s:'Cada email en Brevo tiene un user ID sincronizado con la DB de Tribbu. Se sabe exactamente quién abrió qué email, qué perk visitó y qué hizo después.'},{t:'p',s:'Con UTMs en todos los links, el comportamiento post-email se trackea directamente en el sistema de analytics de Tribbu.'},{t:'p',s:'Los informes automáticos de Brevo/Mailchimp + Metricool permiten generar el reporte de salud del canal sin trabajo manual.'},{t:'s',s:'El sistema de tracking de cohortes está asignado al equipo operativo — la landing es el único canal que lo permite sin desarrollo adicional.'}],
+   }},
+  {id:'ux',l:'Experiencia de usuario y percepción de marca',d:'Onboarding, exclusividad percibida y coherencia con la identidad de Tribbu Club',w:14,
+   sc:{inapp:5,wa:3,ig:3,tk:2,fb:2,tg:2,ln:2,land:4},
+   why:'<strong>Peso 14%.</strong> Tribbu Club nace en un contexto de <strong>recuperación de confianza</strong> tras problemas de fraude recientes. La experiencia del canal tiene que transmitir exclusividad, profesionalidad y coherencia de marca. Un canal que parezca improvisado daña directamente el objetivo de reconstruir confianza. <span class="src">Referencia del proyecto (Andrea\'s ideas): "Me gustaría que TRIBBU Club se asociara a un lugar donde conocer gente increíble... que aporta valor real, no solo entretenimiento"</span>',
+   args:{
+    inapp:[{t:'p',s:'Experiencia completamente integrada en la app. El usuario no sale del contexto de Tribbu — el Club es una funcionalidad del producto.'},{t:'p',s:'Transmite que el Club es una apuesta real, no un grupo de WhatsApp o newsletter externa. Refuerza la percepción de Tribbu como plataforma completa.'}],
+    wa:[{t:'p',s:'Para el perfil de 39 años, WhatsApp es el canal más familiar y cercano. La sensación de recibir un mensaje directo de Tribbu es genuina.'},{t:'c',s:'Un canal de WA no transmite exclusividad de marca. Perceptualmente es idéntico a un grupo de vecinos o del colegio.'},{t:'c',s:'WhatsApp no permite personalización visual de marca de ningún tipo.'}],
+    ig:[{t:'p',s:'Instagram es el canal más alineado con el contenido visual del Club: eventos, experiencias, UGC.'},{t:'c',s:'Los Broadcast Channels no tienen diseño personalizable.'},{t:'c',s:'El feed de IG mezcla el contenido del Club con publicidad y entretenimiento. Difícil mantener la sensación de exclusividad.'}],
+    tk:[{t:'c',s:'TikTok asocia la marca a contenido efímero y viral. Choca con los valores de profundidad y confianza del brief del Club.'},{t:'c',s:'El perfil de 39 años no percibe TikTok como un espacio de confianza o exclusividad.'}],
+    fb:[{t:'c',s:'La percepción de Facebook en 2026 entre 35-45 años está asociada a contenido familiar y político. No al estilo de vida de Tribbu.'},{t:'c',s:'Un "grupo de Facebook" comunicaría exactamente lo contrario de innovación y exclusividad.'}],
+    tg:[{t:'c',s:'Telegram está asociado en España a canales de filtración y comunidades técnicas. No encaja con los valores de Tribbu.'},{t:'c',s:'Para el usuario de 39 años que no usa Telegram, instalar la app por el Club es una fricción que no se puede justificar.'}],
+    ln:[{t:'c',s:'LinkedIn tiene una percepción demasiado corporativa para los valores de Tribbu Club: "enjoy the ride", "juntos es mejor".'},{t:'c',s:'El usuario de Tribbu no asocia compartir coche con su identidad profesional en LinkedIn.'}],
+    land:[{t:'p',s:'La landing puede diseñarse con la identidad visual completa de Tribbu Club: colores, tipografía, tono de voz, imágenes de comunidad.'},{t:'p',s:'El acceso por token o invitación transmite exclusividad real — no es un canal público, es un espacio al que has sido invitado.'},{t:'c',s:'La fricción de onboarding (registrarse, confirmar email, explorar landing) es mayor que en WA o RRSS. Es el único punto de debilidad real.'},{t:'s',s:'Referencia del proyecto: "No es marketing disfrazado: no se crea para vender más, sino para mover mejor" — requiere una experiencia diseñada, no un canal genérico.'}],
+   }},
+  {id:'escala',l:'Escalabilidad sin añadir equipo',d:'Crecer de los primeros miembros a miles sin carga proporcional adicional',w:14,
+   sc:{inapp:4,wa:2,ig:3,tk:4,fb:2,tg:4,ln:3,land:5},
+   why:'<strong>Peso 14%.</strong> El Track Operativa del proyecto tiene 3 personas asignadas: Mario, Ángela y Andrés. No está previsto añadir equipo en Q2. El canal elegido debe poder crecer sin que cada nuevo usuario genere más trabajo proporcional. Los canales que requieren moderación activa o gestión manual de listas no escalan sin equipo adicional que no existe. <span class="src">Referencia del proyecto (Plan de ejecución, Track Operativa): "Mario, Ángela, Andrés — Canal V1 vivo, base siempre activa"</span>',
+   args:{
+    inapp:[{t:'p',s:'Una push llega a 1M usuarios igual que a 100, con el mismo esfuerzo editorial.'},{t:'c',s:'Cada mejora funcional requiere un nuevo sprint de Producto. La velocidad de iteración está limitada.'}],
+    wa:[{t:'c',s:'Con 200 usuarios el Broadcast es manejable. Con 1.000+, gestionar respuestas, dudas y listas manuales requiere al menos 1 persona adicional a tiempo parcial.'},{t:'c',s:'WA no tiene herramientas de moderación automática suficientes para volumen alto.'}],
+    ig:[{t:'p',s:'El contenido de Instagram escala perfectamente: el mismo post llega a 100 o a 10.000 seguidores con el mismo esfuerzo.'},{t:'c',s:'La gestión de DMs y comentarios escala mal: cada seguidor activo que interactúa genera carga adicional.'}],
+    tk:[{t:'p',s:'TikTok es el canal que mejor escala: el algoritmo amplifica de forma orgánica sin trabajo adicional.'},{t:'c',s:'La producción constante de vídeo de calidad requiere un perfil creativo dedicado que el Track Operativa no tiene asignado.'}],
+    fb:[{t:'c',s:'Los grupos de Facebook generan notificaciones y conversaciones que requieren moderación activa. No escala sin equipo.'},{t:'c',s:'Con el alcance orgánico de FB (1-5%) llegar a masa crítica sin paid es inviable para el equipo actual.'}],
+    tg:[{t:'p',s:'Un canal unidireccional de Telegram escala perfectamente: el mismo mensaje a 100 o 10.000 suscriptores sin trabajo adicional.'},{t:'c',s:'El crecimiento en España está limitado por la baja adopción del perfil de usuario de Tribbu.'}],
+    ln:[{t:'p',s:'La newsletter de LN escala bien técnicamente.'},{t:'c',s:'El crecimiento orgánico en LN para una página de empresa es lento. Pasar a miles de suscriptores relevantes requiere meses.'}],
+    land:[{t:'p',s:'Una newsletter en Brevo tiene exactamente el mismo coste de gestión para 200 que para 20.000 usuarios: redactar y enviar. El sistema hace el resto.'},{t:'p',s:'La landing no genera carga de soporte reactivo. El usuario consulta los perks cuando quiere, sin generar interacción que requiera respuesta.'},{t:'s',s:'El equipo del Track Operativa son 3 personas. La landing es el único canal que pueden operar solos a cualquier escala.'}],
+   }},
+];
+
+const chs=[
+  {id:'inapp',e:'📱',n:'In-App nativo',  c:'#5A1A90'},
+  {id:'wa',   e:'💬',n:'WhatsApp',        c:'#0A5A20'},
+  {id:'ig',   e:'📸',n:'Instagram',       c:'#7A2050'},
+  {id:'tk',   e:'🎵',n:'TikTok',          c:'#1A1A1A'},
+  {id:'fb',   e:'👥',n:'Facebook',        c:'#0A1A70'},
+  {id:'tg',   e:'✈️',n:'Telegram',        c:'#0A3070'},
+  {id:'ln',   e:'💼',n:'LinkedIn',        c:'#0A2060'},
+  {id:'land', e:'🌐',n:'Landing+Newsletter', c:'#B06070'},
+];
+const chk=['inapp','wa','ig','tk','fb','tg','ln','land'];
+const chm=Object.fromEntries(chs.map(c=>[c.id,c]));
+const dcls={5:'d5',4:'d4',3:'d3',2:'d2',1:'d1'};
+let cdim='alcance';
+
+function renderDnav(){
+  document.getElementById('dnav').innerHTML=dims.map(d=>
+    `<button class="dbtn${d.id===cdim?' on':''}" data-d="${d.id}">${d.l}</button>`
+  ).join('');
+  document.querySelectorAll('.dbtn').forEach(b=>b.addEventListener('click',()=>{
+    cdim=b.dataset.d;renderDnav();renderTable();
+  }));
+}
+function renderTable(){
+  const dim=dims.find(d=>d.id===cdim);
+  document.getElementById('dtbar').innerHTML=`<h3>${dim.l}</h3><p>${dim.d}</p>`;
+  document.getElementById('tbody').innerHTML=td[cdim].map(r=>
+    `<tr><td class="rl">${r.l}</td>${r.v.map(v=>`<td>${ep(v)}</td>`).join('')}</tr>`
+  ).join('');
+}
+
+function renderMatriz(){
+  const tots=chs.map(ch=>{let t=0;crit.forEach(c=>{t+=c.sc[ch.id]*c.w/100;});return{...ch,t};});
+  document.getElementById('clist').innerHTML=crit.map(c=>`
+    <div class="ci2" id="ci-${c.id}">
+      <div class="crow2" data-id="${c.id}">
+        <div class="ctog">▶</div>
+        <div class="clbl">${c.l}<small>${c.d}</small></div>
+        <div class="wbg">${c.w}%</div>
+        ${chk.map(k=>`<div><div class="sd ${dcls[c.sc[k]]}">${c.sc[k]}</div></div>`).join('')}
+      </div>
+      <div class="cbody2">
+        <div class="why">${c.why}</div>
+        <div class="chg">
+          ${chs.map(ch=>{
+            const args=c.args[ch.id]||[];
+            return`<div class="chc">
+              <div class="chh"><span style="font-size:15px">${ch.e}</span>
+              <span class="chn" style="color:${ch.c}">${ch.n}</span>
+              <div class="sd ${dcls[c.sc[ch.id]]}" style="width:25px;height:25px;font-size:10px;flex-shrink:0">${c.sc[ch.id]}</div></div>
+              ${args.map(a=>`<div class="arg ${a.t}">${a.s}</div>`).join('')}
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+  document.querySelectorAll('.crow2').forEach(r=>r.addEventListener('click',()=>r.closest('.ci2').classList.toggle('op')));
+
+  const sorted=[...tots].sort((a,b)=>b.t-a.t);
+  const maxT=sorted[0].t;
+  const gc=v=>v>=4?'#1A6040':v>=2.8?'#7A4A0A':'#802020';
+  const sub=['⭐ Recomendado V1','Complementario','Objetivo Q3-Q4','','','','',''];
+  document.getElementById('blist2').innerHTML=sorted.map((ch,i)=>`
+    <div class="brow2${i===0?' win':''}">
+      <div class="bn" style="color:${ch.c}">${ch.e} ${ch.n}${sub[i]?`<small>${sub[i]}</small>`:''}
+      </div>
+      <div class="bb"><div class="bf" style="width:${(ch.t/maxT*100).toFixed(1)}%;background:${gc(ch.t)}"></div></div>
+      <div class="bv" style="color:${gc(ch.t)}">${ch.t.toFixed(2)}</div>
+    </div>
+  `).join('');
+}
+
+function renderRec(){
+  const tots=chs.map(ch=>{let t=0;crit.forEach(c=>{t+=c.sc[ch.id]*c.w/100;});return{...ch,t};}).sort((a,b)=>b.t-a.t);
+  const gc=v=>v>=4?'#1A6040':v>=2.8?'#7A4A0A':'#802020';
+  const ranks=['1º — Recomendado V1','2º — Canal complementario','3º — Objetivo Q3-Q4'];
+  const descs=[
+    'Gana en los 5 criterios con mayor peso (75% de la ponderación). Único canal que resuelve ISO 27001, segmentación de perks y KPIs demostrables simultáneamente.',
+    'Máxima tasa de lectura y 0 fricción. Pero ISO 27001, segmentación y KPIs son un conflicto. Su rol: notificación inmediata sobre la landing, nunca distribución directa de perks.',
+    'Experiencia perfecta y datos propios. Pero requiere Producto — incompatible con las restricciones de Q2. El botón → WebView es la solución puente hasta Q3-Q4.',
+  ];
+  const podEl=document.getElementById('pod');
+  podEl.innerHTML=tots.slice(0,3).map((ch,i)=>`
+    <div class="pc${i===0?' gd':''}" data-idx="${i}" style="cursor:pointer;transition:box-shadow .2s;">
+      <div class="prk">${ranks[i]}</div>
+      <div class="pnm">${ch.e} ${ch.n}</div>
+      <div class="psc">${ch.t.toFixed(2)}<span style="font-size:13px;font-weight:400">/5</span></div>
+      <div class="pds">${descs[i]}</div>
+      <div style="margin-top:10px;font-size:10px;display:flex;align-items:center;gap:4px;opacity:.55;">
+        <span class="pod-arr" style="transition:transform .2s;display:inline-block;">▶</span>
+        <span>Ver criterios</span>
+      </div>
+      <div class="pod-det" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid ${i===0?'rgba(255,255,255,.1)':'rgba(26,26,26,.08)'};"></div>
+    </div>
+  `).join('');
+
+  tots.slice(0,3).forEach((ch,i)=>{
+    const wins=crit.filter(c=>c.sc[ch.id]>=4).map(c=>`
+      <div style="font-size:11px;padding:3px 0;display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid ${i===0?'rgba(255,255,255,.07)':'rgba(26,26,26,.06)'};">
+        <span style="color:${i===0?'rgba(255,255,255,.65)':'var(--texto-mid)'};">${c.l}</span>
+        <span style="color:var(--verde);font-weight:600;">${c.sc[ch.id]}/5</span>
+      </div>`).join('');
+    const fails=crit.filter(c=>c.sc[ch.id]<=2).map(c=>`
+      <div style="font-size:11px;padding:3px 0;display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid ${i===0?'rgba(255,255,255,.07)':'rgba(26,26,26,.06)'};">
+        <span style="color:${i===0?'rgba(255,255,255,.65)':'var(--texto-mid)'};">${c.l}</span>
+        <span style="color:var(--rojo);font-weight:600;">${c.sc[ch.id]}/5</span>
+      </div>`).join('');
+    const card=podEl.querySelectorAll('.pc')[i];
+    const det=card.querySelector('.pod-det');
+    det.innerHTML=(wins?`<div style="font-size:9px;font-family:var(--ffm);letter-spacing:.08em;color:${i===0?'var(--rosa)':'var(--verde)'};margin-bottom:4px;">GANA EN</div>${wins}`:'')
+      +(fails?`<div style="font-size:9px;font-family:var(--ffm);letter-spacing:.08em;color:var(--rojo);margin-top:8px;margin-bottom:4px;">PIERDE EN</div>${fails}`:'');
+    card.addEventListener('click',()=>{
+      const open=det.style.display==='block';
+      det.style.display=open?'none':'block';
+      card.querySelector('.pod-arr').style.transform=open?'none':'rotate(90deg)';
+    });
+  });
+
+  const roles=[
+    {ch:'land',t:'Canal central',c:'#B06070',d:'Hogar del Club. Perks segmentados, datos propios, tracking real. Todo el valor estratégico vive aquí.'},
+    {ch:'inapp',t:'Puente Q2 / Meta Q3',c:'#5A1A90',d:'Botón → WebView con SSO. 1-2 días de Producto, una única vez. In-app nativo completo en Q3-Q4.'},
+    {ch:'ig',t:'Captación visual',c:'#7A2050',d:'Contenido de eventos, UGC, testimonios. Genera FOMO. Apunta siempre a la landing. Gestionado desde Metricool.'},
+    {ch:'tk',t:'Captación viral',c:'#1A1A1A',d:'Alcance orgánico máximo. Clips de eventos y momentos del Club. Apunta a la landing.'},
+    {ch:'fb',t:'Captación 35-50 años',c:'#0A1A70',d:'Segmento de mayor edad. Página de empresa o grupo privado. Apunta a landing. Metricool.'},
+    {ch:'ln',t:'Captación B2B',c:'#0A2060',d:'Perfil profesional. Empleados que usan Tribbu para ir al trabajo. Newsletter nativa + posts.'},
+    {ch:'wa',t:'Notificación opcional',c:'#0A5A20',d:'Solo para avisar de nuevos perks urgentes o eventos. Nunca para distribuir perks directamente.'},
+    {ch:'tg',t:'Descartado',c:'#9A7080',d:'Adopción demasiado baja en el perfil de 39 años en España. La fricción de instalación no se justifica.'},
+  ];
+  document.getElementById('rg2').innerHTML=roles.map(r=>`
+    <div class="rc">
+      <div class="rt" style="color:${r.c}">${r.t}</div>
+      <div class="rn2">${chm[r.ch].e} ${chm[r.ch].n}</div>
+      <div class="rd">${r.d}</div>
+    </div>
+  `).join('');
+
+  const disc=[
+    {ch:'wa',r:'<strong>No como canal principal:</strong> Datos en Meta (conflicto ISO 27001), segmentación de perks imposible y no escala sin equipo. Sí como capa de notificación complementaria.'},
+    {ch:'ig',r:'<strong>No como canal principal:</strong> Datos en Meta, contenido público sin control de acceso a perks, dependencia del algoritmo. Sí como captación desde Metricool.'},
+    {ch:'tk',r:'<strong>No como canal principal:</strong> Audiencia core (18-28 años) no es el perfil de Tribbu. Datos en ByteDance (máximo riesgo legal UE). Tracking imposible.'},
+    {ch:'fb',r:'<strong>No como canal principal:</strong> Datos en Meta, alcance orgánico 1-5%, percepción anticuada en 2026. Válido como captación para segmento 35-50 años.'},
+    {ch:'tg',r:'<strong>Descartado completamente:</strong> Adopción extremadamente baja en ES para el perfil de 39 años. La fricción de instalar una app nueva es una barrera imposible de justificar.'},
+    {ch:'ln',r:'<strong>No como canal principal:</strong> Tono demasiado corporativo para los valores del Club. Sin segmentación por perfil de carpool. Válido como captación B2B.'},
+  ];
+  document.getElementById('dg').innerHTML=disc.map(d=>`
+    <div class="dc">
+      <div class="dn">${chm[d.ch].e} ${chm[d.ch].n}</div>
+      <div class="dd">${d.r}</div>
+    </div>
+  `).join('');
+}
+
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  if(b.dataset.p==='onboarding') renderOnboarding();
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  const pg=document.getElementById('page-'+b.dataset.p);
+  pg.classList.add('on');
+  if(b.dataset.p==='matriz') renderMatriz();
+  if(b.dataset.p==='rec') renderRec();
+}));
+
+renderDnav();
+renderTable();
+
+// ── ONBOARDING ──────────────────────────────────────
+const obFlows={
+  A:{phases:[
+    {l:'Fase 1 — Descubrimiento en la app',c:'ph1',rows:[
+      {cols:[
+        {i:'📱',t:'Abre la app de Tribbu',d:'Uso normal de la app',k:'start',det:'El usuario abre la app de Tribbu como cualquier otro día. No tiene por qué ir a buscar el Club — el botón está visible en el home.'},
+        {i:'👆',t:'Ve el botón "Tribbu Club"',d:'Visible en el home',k:'normal',det:'El botón aparece en el home de la app. Si es la primera vez que lo ve, se muestra un tooltip: "Bienvenido al Club exclusivo de Tribbu."'},
+      ]},
+    ]},
+    {l:'Fase 2 — Autenticación SSO',c:'ph2',rows:[
+      {cols:[
+        {i:'🔑',t:'App genera token SSO',d:'Con los datos del usuario',k:'highlight',det:'La app genera automáticamente un token SSO con los datos del usuario (teléfono + perfil). El usuario no hace nada — ocurre en el fondo, de forma transparente.'},
+        {i:'🌐',t:'Se abre la landing',d:'WebView con sesión activa',k:'highlight',det:'La landing se abre dentro de la app como WebView, con la sesión ya activa. El usuario no necesita introducir ningún dato adicional.'},
+      ]},
+    ]},
+    {l:'Fase 3 — Primera experiencia en el Club',c:'ph3',rows:[
+      {cols:[
+        {i:'🎉',t:'Pantalla de bienvenida',d:'Hola [nombre], ya eres parte de LA TRIBBU',k:'normal',det:'Pantalla de bienvenida personalizada con el nombre del usuario. Título: "Forma parte de LA TRIBBU. Comparte algo más que el coche."'},
+        {i:'🎁',t:'Ve sus perks',d:'Personalizados según perfil',k:'normal',det:'Perks personalizados: conductores activos ven Telpark e ITV. Usuarios +23 años ven TaxDown. Revolut y Better disponibles para todos.'},
+      ]},
+      {cols:[
+        {i:'🎬',t:'LA TRIBBU en acción',d:'Vídeos y eventos',k:'normal',det:'Sección con vídeos de Instagram de eventos pasados (Primavera Pop, RunTogether, cenas) y agenda de próximos planes.'},
+        {i:'📩',t:'CTA final',d:'Suscríbete a nuestra newsletter',k:'end',det:'"Compartir coche es solo el principio." Botón para suscribirse a la newsletter y recibir las mejores recompensas directamente.'},
+      ]},
+    ]},
+  ]},
+  B:{phases:[
+    {l:'Fase 1 — Descubrimiento de la landing',c:'ph1',rows:[
+      {cols:[
+        {i:'📲',t:'Llega a la landing',d:'Desde RRSS, email o boca-oreja',k:'start',det:'El usuario llega desde Instagram, TikTok, Facebook, LinkedIn o recomendación. No necesita tener Tribbu instalado para acceder.'},
+        {i:'🏠',t:'Ve el hero',d:'"Forma parte de LA TRIBBU"',k:'normal',det:'Hero con dos columnas: formulario de registro a la izquierda. Título y descripción a la derecha: "Forma parte de LA TRIBBU. Comparte algo más que el coche."'},
+      ]},
+      {cols:[
+        {i:'❓',t:'Lee ¿Qué es LA TRIBBU?',d:'Recompensas · Acceso · Comunidad',k:'normal',det:'Tres beneficios: 🎁 Recompensas — descuentos en marcas del día a día. ⭐ Acceso a lo grande — ofertas exclusivas. 🎉 Juntos se disfruta más — eventos y planes.'},
+        {i:'🎁',t:'Ve promociones destacadas',d:'TaxDown y otros perks',k:'normal',det:'Cards de perks: TaxDown (15% de descuento en la declaración de la renta, válido hasta el 30 de junio). Se irán añadiendo más partners.'},
+      ]},
+    ]},
+    {l:'Fase 2 — Registro en el formulario',c:'ph2',rows:[
+      {cols:[
+        {i:'✍️',t:'Rellena el formulario',d:'Nombre · Teléfono · Fecha (opt.)',k:'normal',det:'Formulario: Nombre, Teléfono (campo principal, sin email como requisito), Fecha de nacimiento (opcional). Checkboxes: política de privacidad (obligatorio) y consentimiento de marketing (opcional).'},
+        {i:'✅',t:'"Quiero sumarme"',d:'CTA del formulario',k:'highlight',det:'Botón principal: "Quiero sumarme". Al pulsarlo el usuario queda registrado en LA TRIBBU y accede a todos los perks y eventos.'},
+      ]},
+    ]},
+    {l:'Fase 3 — Bienvenida y acceso',c:'ph3',rows:[
+      {cols:[
+        {i:'🎉',t:'Confirmación de registro',d:'Bienvenida a LA TRIBBU',k:'normal',det:'Pantalla de confirmación: bienvenida al Club. El usuario ya forma parte de LA TRIBBU y puede acceder a perks y eventos.'},
+        {i:'🎬',t:'LA TRIBBU en acción',d:'"Lo que pasa fuera del coche"',k:'normal',det:'Vídeos de los últimos eventos y agenda de próximos planes. Título: "Lo que pasa fuera del coche."'},
+      ]},
+      {cols:[
+        {i:'📩',t:'CTA final',d:'Newsletter',k:'end',det:'"Compartir coche es solo el principio." Botón: "Suscríbete a nuestra newsletter." Footer de la web.'},
+      ]},
+    ]},
+  ]},
+  C:{phases:[
+    {l:'Fase 1 — Llegada y verificación',c:'ph1',rows:[
+      {cols:[
+        {i:'📲',t:'Llega a la landing',d:'Desde RRSS, email o boca-oreja',k:'start',det:'El usuario llega a la landing. Ve el hero pero antes de acceder a los perks necesita verificar que es usuario de Tribbu.'},
+        {i:'📱',t:'Introduce su teléfono',d:'Único campo de verificación',k:'normal',det:'El formulario solicita únicamente el número de teléfono. El email no es requisito en Tribbu — toda la verificación se hace por teléfono.'},
+      ]},
+      {cols:[
+        {i:'🔍',t:'¿Está en la DB de Tribbu?',d:'Verificación automática',k:'decision',det:'El sistema verifica si el número existe en la DB de usuarios de Tribbu. Esta verificación es automática e instantánea.'},
+      ]},
+      {branch:true,
+       left:{label:'NO',cls:'ob-bno',col:{i:'🚫',t:'No es usuario de Tribbu',d:'Redirige a descargar la app',k:'error',det:'"No encontramos tu cuenta. Para unirte a LA TRIBBU primero necesitas ser usuario de Tribbu." Enlace para descargar la app.'}},
+       right:{label:'SÍ',cls:'ob-byes',col:{i:'💬',t:'SMS con código de verificación',d:'Código de 4-6 dígitos',k:'highlight',det:'Si el teléfono existe en la DB de Tribbu, se envía automáticamente un SMS con código de verificación. El usuario tiene 5 minutos para introducirlo.'}}
+      },
+      {cols:[
+        {i:'🔢',t:'Introduce el código SMS',d:'Verificación en 2 pasos',k:'normal',det:'El usuario introduce el código recibido por SMS. Si es incorrecto puede solicitar uno nuevo. El sistema detecta si el teléfono no recibe el SMS y ofrece reintento.'},
+      ]},
+    ]},
+    {l:'Fase 2 — Acceso y experiencia',c:'ph2',rows:[
+      {cols:[
+        {i:'🎉',t:'Pantalla de bienvenida',d:'Hola [nombre], ya eres parte de LA TRIBBU',k:'normal',det:'Pantalla de bienvenida personalizada con el nombre del usuario de Tribbu. Sesión activa y acceso a todos los perks y contenidos del Club.'},
+        {i:'🎁',t:'Ve sus perks',d:'Personalizados según perfil Tribbu',k:'normal',det:'Perks según datos de Tribbu: conductores activos ven Telpark e ITV; +23 años ven TaxDown; Revolut y Better para todos. Sin pasos adicionales — ya tenemos su perfil.'},
+      ]},
+      {cols:[
+        {i:'🎬',t:'LA TRIBBU en acción',d:'Eventos pasados y próximos',k:'normal',det:'Usuarios verificados de Tribbu tienen acceso prioritario a eventos antes que el resto de la lista de espera.'},
+        {i:'📩',t:'CTA final',d:'Newsletter personalizada',k:'end',det:'"Compartir coche es solo el principio." Al estar verificado como usuario de Tribbu, recibe comunicaciones personalizadas según su perfil de uso.'},
+      ]},
+    ]},
+  ]},
+};
+
+function escOb(s){return s.replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+function flattenFlow(fk){
+  const flow=obFlows[fk];
+  const steps=[];
+  flow.phases.forEach(ph=>{
+    steps.push({type:'phase',label:ph.l,cls:ph.c});
+    ph.rows.forEach(row=>{
+      if(row.branch){
+        steps.push({type:'branch',left:row.left,right:row.right});
+      } else {
+        row.cols.forEach(col=>steps.push({type:'step',col}));
+      }
+    });
+  });
+  return steps;
+}
+
+function renderObFlow(fk){
+  const cont=document.getElementById('ob-steps-'+fk);
+  const steps=flattenFlow(fk);
+  let h='<div style="display:flex;flex-direction:column;align-items:center;width:100%;">';
+  let stepN=0;
+
+  steps.forEach((s,si)=>{
+    if(s.type==='phase'){
+      if(si>0) h+=`<div style="height:12px;width:1px;background:var(--borde);margin:0 auto;"></div>`;
+      h+=`<div style="width:100%;margin:16px 0 8px;">
+        <div class="ob-phase-lbl ${s.cls}">${s.label}</div>
+      </div>`;
+    } else if(s.type==='step'){
+      stepN++;
+      const col=s.col;
+      h+=`<div style="height:20px;width:1px;background:var(--borde);margin:0 auto;"></div>`;
+      h+=`<div style="display:flex;align-items:flex-start;gap:10px;width:100%;">
+        <div style="width:26px;height:26px;border-radius:50%;background:var(--negro);color:var(--rosa);font-family:var(--ff-mono);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:10px;">${stepN}</div>
+        <div class="ob-box ${col.k}" style="flex:1;text-align:left;padding:12px 14px;flex-direction:row;align-items:center;gap:10px;min-height:56px;"
+          data-flow="${fk}" data-title="${escOb(col.t)}" data-det="${escOb(col.det)}">
+          <div style="font-size:20px;flex-shrink:0;">${col.i}</div>
+          <div style="flex:1;">
+            <div class="ob-ttl" style="font-size:12px;">${col.t}</div>
+            <div class="ob-dsc">${col.d}</div>
+          </div>
+          <div style="font-size:10px;color:var(--texto-muted);flex-shrink:0;opacity:.5;">→</div>
+        </div>
+      </div>`;
+    } else if(s.type==='branch'){
+      h+=`<div style="height:20px;width:1px;background:var(--borde);margin:0 auto;"></div>`;
+      h+=`<div style="display:flex;gap:10px;width:100%;">`;
+      ['left','right'].forEach(side=>{
+        const b=s[side];
+        stepN++;
+        h+=`<div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <div style="height:18px;display:flex;align-items:center;">
+            <span class="ob-blabel ${b.cls}">${b.label}</span>
+          </div>
+          <div class="ob-box ${b.col.k}" style="width:100%;text-align:left;padding:10px 12px;flex-direction:row;align-items:center;gap:8px;min-height:52px;"
+            data-flow="${fk}" data-title="${escOb(b.col.t)}" data-det="${escOb(b.col.det)}">
+            <div style="font-size:18px;flex-shrink:0;">${b.col.i}</div>
+            <div style="flex:1;">
+              <div class="ob-ttl" style="font-size:11px;">${b.col.t}</div>
+              <div class="ob-dsc">${b.col.d}</div>
+            </div>
+          </div>
+        </div>`;
+      });
+      h+=`</div>`;
+    }
+  });
+
+  h+=`</div>`;
+  cont.innerHTML=h;
+  cont.querySelectorAll('.ob-box').forEach(box=>{
+    box.addEventListener('click',()=>{
+      cont.querySelectorAll('.ob-box').forEach(b=>b.classList.remove('act'));
+      box.classList.add('act');
+      const det=document.getElementById('ob-detail-'+fk);
+      det.innerHTML=`<strong>${box.dataset.title}</strong><br>${box.dataset.det}`;
+    });
+  });
+}
+
+function renderOnboarding(){
+  ['A','B','C'].forEach(fk=>{ if(!document.getElementById('ob-steps-'+fk).hasChildNodes()) renderObFlow(fk); });
+}
+
+document.querySelectorAll('.obt').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.obt').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('.ob-view').forEach(v=>v.classList.remove('on'));
+    btn.classList.add('on');
+    document.getElementById('ob-'+btn.dataset.flow).classList.add('on');
+  });
+});
+</script>
+</body>
+</html>
