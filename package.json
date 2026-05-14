@@ -1,0 +1,10 @@
+{
+  "name": "tribbu-club",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npx serve . -p $PORT --single"
+  },
+  "dependencies": {
+    "serve": "^14.0.0"
+  }
+}
