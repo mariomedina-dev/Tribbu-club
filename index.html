@@ -268,7 +268,16 @@ table.t{width:100%;border-collapse:collapse;min-width:980px;font-size:11.5px;bac
       <div class="stat"><b class="ac">100%</b>argumentado</div>
     </div>
   </div>
-
+  <div class="logo-wrap">
+    <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="34" cy="34" r="34" fill="#F2C4CE"/>
+      <!-- Rectángulo superior -->
+      <rect x="18" y="18" width="32" height="10" rx="1" fill="#1A1A1A"/>
+      <!-- Triángulo invertido (punta abajo) -->
+      <polygon points="18,30 50,30 34,52" fill="#1A1A1A"/>
+    </svg>
+    <div class="logo-name">TRIBBU</div>
+  </div>
 </header>
 
 <nav class="tabs">
@@ -276,6 +285,7 @@ table.t{width:100%;border-collapse:collapse;min-width:980px;font-size:11.5px;bac
   <button data-p="matriz">02 · Matriz de decisión</button>
   <button data-p="rec">03 · Recomendación</button>
   <button data-p="onboarding">04 · Onboarding flows</button>
+  <button data-p="landing">05 · La landing real</button>
 </nav>
 
 <div class="page on" id="page-comp">
@@ -349,20 +359,19 @@ table.t{width:100%;border-collapse:collapse;min-width:980px;font-size:11.5px;bac
   <div class="ey">Cómo entra el usuario al Club — tres escenarios posibles</div>
 
   <div class="mint card">
-    <p>Tres flujos definidos según la decisión de acceso. <strong>Flujo A</strong> es el ideal una vez Producto implemente el botón SSO. <strong>Flujo B</strong> es la landing abierta para máxima captación. <strong>Flujo C</strong> es la landing cerrada que garantiza que solo entran usuarios reales de Tribbu. El teléfono es el único identificador — sin email como requisito. Toca cada paso para ver el detalle de qué ocurre en ese momento.</p>
+    <p>Dos flujos definidos. <strong>Flujo A</strong> es el ideal a futuro una vez Producto implemente el botón SSO — pendiente de roadmap Q3-Q4. <strong>Flujo B</strong> es el flujo confirmado para V1: landing abierta, cualquiera puede registrarse. El formulario pide Nombre, Email, Teléfono y Fecha de nacimiento. La verificación de cuenta de Tribbu no es posible en V1 por diferencia de bases de datos. Toca cada paso para ver el detalle.</p>
   </div>
 
   <div class="ob-tabs">
-    <button class="obt on" data-flow="A">Flujo A · Botón en app</button>
-    <button class="obt" data-flow="B">Flujo B · Landing abierta</button>
-    <button class="obt" data-flow="C">Flujo C · Landing cerrada</button>
+    <button class="obt on" data-flow="A">Flujo A · Botón en app (futuro)</button>
+    <button class="obt" data-flow="B">Flujo B · Landing abierta (V1 confirmado ✓)</button>
   </div>
 
   <div class="ob-view on" id="ob-A">
     <div class="ob-header">
       <div class="ob-title">Flujo A — El usuario toca "Tribbu Club" en la app y ya está dentro</div>
-      <div class="ob-sub">Sin fricciones, sin formularios, sin código SMS. Tribbu ya sabe quién eres. 1-2 días de dev de Producto para activar el botón — la única dependencia del flujo.</div>
-      <span class="ob-badge">Ideal · Requiere 1-2 días de Producto</span>
+      <div class="ob-sub">El flujo ideal a futuro. Sin fricciones, sin formularios. Tribbu ya sabe quién eres. Requiere que Producto implemente el botón SSO — pendiente de roadmap Q3-Q4.</div>
+      <span class="ob-badge">Pendiente de Producto — no disponible en V1</span>
     </div>
     <div id="ob-steps-A"></div>
     <div class="ob-detail" id="ob-detail-A"><span class="ob-hint">Toca cualquier paso para ver más detalles.</span></div>
@@ -378,15 +387,221 @@ table.t{width:100%;border-collapse:collapse;min-width:980px;font-size:11.5px;bac
     <div class="ob-detail" id="ob-detail-B"><span class="ob-hint">Toca cualquier paso para ver más detalles.</span></div>
   </div>
 
-  <div class="ob-view" id="ob-C">
-    <div class="ob-header">
-      <div class="ob-title">Flujo C — El usuario verifica su teléfono y la landing comprueba que es de Tribbu</div>
-      <div class="ob-sub">Introduce su teléfono → se cruza con la DB de Tribbu → si es usuario recibe un SMS → entra. Si no es usuario de Tribbu, se le redirige a la app. El Club solo es para quien ya ha apostado por compartir coche.</div>
-      <span class="ob-badge">Disponible desde el día 1 · Requiere integración con DB de Tribbu · Garantiza exclusividad real</span>
+  
+</div>
+
+<div class="page" id="page-landing">
+<div class="ey">La landing real — tribbuapp.com/la-tribbu</div>
+
+<style>
+.ld{width:100%;}
+/* HERO */
+.ld-hero{background:var(--rosa);border-radius:14px;padding:2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;margin-bottom:10px;}
+.ld-hero-tag{font-family:var(--ffm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--negro);opacity:.55;margin-bottom:.75rem;}
+.ld-hero-title{font-family:var(--ffd);font-size:clamp(1.6rem,3vw,2.3rem);font-weight:800;color:var(--negro);line-height:1.1;margin-bottom:.85rem;letter-spacing:-.02em;}
+.ld-hero-desc{font-size:12.5px;color:rgba(26,26,26,.65);line-height:1.7;margin-bottom:1.25rem;max-width:380px;}
+.ld-hero-cta{display:inline-block;background:var(--negro);color:var(--rosa);font-family:var(--ffd);font-size:13px;font-weight:700;padding:11px 24px;border-radius:25px;letter-spacing:.02em;}
+/* FORM */
+.ld-form{background:#fff;border-radius:12px;padding:1.5rem;box-shadow:0 4px 24px rgba(26,26,26,.12);}
+.ld-form-title{font-family:var(--ffd);font-size:15px;font-weight:700;color:var(--negro);margin-bottom:1rem;line-height:1.3;}
+.ld-input{width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--negro);margin-bottom:.6rem;font-family:var(--ff);background:var(--rosa-light);}
+.ld-input::placeholder{color:var(--texto-muted);}
+.ld-inputs-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem;}
+.ld-check{display:flex;align-items:flex-start;gap:7px;margin-bottom:.5rem;}
+.ld-check input{margin-top:2px;flex-shrink:0;accent-color:var(--negro);}
+.ld-check label{font-size:11px;color:var(--texto-muted);line-height:1.5;}
+.ld-check label a{color:var(--negro);font-weight:500;}
+.ld-submit{width:100%;background:var(--negro);color:var(--rosa);font-family:var(--ffd);font-size:13px;font-weight:700;padding:12px;border-radius:8px;border:none;cursor:default;margin-top:.5rem;letter-spacing:.02em;}
+/* QUE ES */
+.ld-sec{padding:2rem 0 1rem;}
+.ld-sec-title{font-family:var(--ffd);font-size:clamp(1.3rem,2.5vw,1.9rem);font-weight:800;color:var(--negro);text-align:center;margin-bottom:.6rem;letter-spacing:-.01em;}
+.ld-sec-desc{font-size:12.5px;color:var(--texto-mid);text-align:center;max-width:600px;margin:0 auto 2rem;line-height:1.7;}
+.ld-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;}
+.ld-benefit{background:#fff;border-radius:12px;padding:1.4rem;border:1px solid var(--borde);text-align:center;box-shadow:0 1px 4px rgba(26,26,26,.04);}
+.ld-benefit-icon{font-size:28px;margin-bottom:.65rem;}
+.ld-benefit-title{font-family:var(--ffd);font-size:13px;font-weight:700;color:var(--negro);margin-bottom:.4rem;}
+.ld-benefit-desc{font-size:11.5px;color:var(--texto-muted);line-height:1.6;}
+/* PERK */
+.ld-perk{background:var(--rosa-mid);border-radius:14px;padding:1.75rem 2rem;display:flex;align-items:center;gap:1.5rem;margin-bottom:10px;border:1px solid rgba(196,120,138,.2);}
+.ld-perk-logo{width:54px;height:54px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;border:1px solid var(--borde);}
+.ld-perk-body{flex:1;}
+.ld-perk-brand{font-family:var(--ffm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--rosa-dark);margin-bottom:.2rem;}
+.ld-perk-title{font-family:var(--ffd);font-size:15px;font-weight:700;color:var(--negro);margin-bottom:.35rem;line-height:1.25;}
+.ld-perk-desc{font-size:12px;color:var(--texto-mid);line-height:1.6;margin-bottom:.35rem;}
+.ld-perk-tag{font-size:10.5px;color:var(--texto-muted);font-style:italic;}
+.ld-perk-cta{background:var(--negro);color:var(--rosa);font-family:var(--ffd);font-size:11px;font-weight:700;padding:9px 20px;border-radius:20px;white-space:nowrap;flex-shrink:0;border:none;cursor:default;}
+/* VIDEOS */
+.ld-videos-sec{padding:1.5rem 0 1rem;}
+.ld-videos-warn{background:#fff8ee;border:1px solid var(--ambar-bd);border-radius:9px;padding:.85rem 1rem;margin:.75rem 0;font-size:12px;color:#5A3A10;line-height:1.55;}
+.ld-videos-warn strong{color:var(--ambar);}
+.ld-videos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:1rem 0;}
+.ld-video{background:var(--negro);border-radius:10px;aspect-ratio:9/16;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
+.ld-video-icon{font-size:22px;color:rgba(255,255,255,.3);}
+.ld-video-lbl{font-size:10px;color:rgba(255,255,255,.2);text-align:center;padding:0 6px;line-height:1.4;}
+/* CTA FINAL */
+.ld-cta{background:var(--negro);border-radius:14px;padding:2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;margin-bottom:10px;}
+.ld-cta-title{font-family:var(--ffd);font-size:clamp(1.3rem,2.5vw,1.9rem);font-weight:800;color:#fff;margin-bottom:.7rem;line-height:1.15;letter-spacing:-.01em;}
+.ld-cta-desc{font-size:12.5px;color:rgba(255,255,255,.45);line-height:1.7;}
+.ld-cta-form{background:rgba(255,255,255,.05);border-radius:10px;padding:1.2rem;border:1px solid rgba(255,255,255,.1);}
+.ld-cta-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:9px 12px;font-size:12.5px;color:#fff;margin-bottom:.6rem;font-family:var(--ff);}
+.ld-cta-input::placeholder{color:rgba(255,255,255,.3);}
+.ld-cta-check{display:flex;align-items:flex-start;gap:7px;margin-bottom:.75rem;}
+.ld-cta-check label{font-size:11px;color:rgba(255,255,255,.35);line-height:1.5;}
+.ld-cta-check label a{color:rgba(255,255,255,.55);}
+.ld-cta-submit{width:100%;background:var(--rosa);color:var(--negro);font-family:var(--ffd);font-size:13px;font-weight:700;padding:11px;border-radius:7px;border:none;cursor:default;}
+/* FOOTER */
+.ld-footer{background:var(--negro2);border-radius:14px;padding:2rem 2.5rem;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:1.5rem;margin-bottom:10px;}
+.ld-footer-logo{font-family:var(--ffd);font-size:18px;font-weight:800;color:#fff;margin-bottom:.35rem;}
+.ld-footer-logo span{color:var(--rosa);}
+.ld-footer-copy{font-size:10px;color:rgba(255,255,255,.2);margin-bottom:.6rem;}
+.ld-footer-socials{display:flex;gap:.75rem;}
+.ld-footer-social{font-size:11px;color:rgba(255,255,255,.3);}
+.ld-footer-col-title{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.65rem;}
+.ld-footer-link{display:block;font-size:11.5px;color:rgba(255,255,255,.38);margin-bottom:.35rem;}
+/* DIRECT ACCESS BTN */
+.ld-access{display:block;text-decoration:none;margin-top:1rem;}
+.ld-access-inner{background:var(--negro);border-radius:14px;padding:2rem;text-align:center;border:2px solid var(--negro);transition:opacity .15s;}
+.ld-access-inner:hover{opacity:.9;}
+.ld-access-emoji{font-size:36px;margin-bottom:.75rem;}
+.ld-access-title{font-family:var(--ffd);font-size:18px;font-weight:800;color:#fff;margin-bottom:.4rem;}
+.ld-access-url{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:1.25rem;font-family:var(--ffm);}
+.ld-access-btn{display:inline-block;background:var(--rosa);color:var(--negro);font-family:var(--ffd);font-size:13px;font-weight:700;padding:11px 28px;border-radius:25px;}
+@media(max-width:640px){
+  .ld-hero,.ld-cta{grid-template-columns:1fr;}
+  .ld-benefits,.ld-videos{grid-template-columns:1fr 1fr;}
+  .ld-footer{grid-template-columns:1fr 1fr;}
+  .ld-perk{flex-direction:column;}
+  .ld-inputs-row{grid-template-columns:1fr;}
+}
+</style>
+
+<div class="ld">
+
+  <!-- HERO -->
+  <div class="ld-hero">
+    <div>
+      <div class="ld-hero-tag">La comunidad Tribbu</div>
+      <div class="ld-hero-title">Forma parte de LA TRIBBU.<br>Comparte algo más que el coche.</div>
+      <div class="ld-hero-desc">Una comunidad creada para quienes creen que el camino se disfruta más cuando se comparte. Ventajas, experiencias y recompensas para LA TRIBBU. Súmate a la lista y accede antes que nadie a los beneficios y experiencias que te mereces por hacer del mundo un lugar mejor.</div>
+      <div class="ld-hero-cta">Me sumo a TRIBBU →</div>
     </div>
-    <div id="ob-steps-C"></div>
-    <div class="ob-detail" id="ob-detail-C"><span class="ob-hint">Toca cualquier paso para ver más detalles.</span></div>
+    <div class="ld-form">
+      <div class="ld-form-title">Únete y sé el primero en enterarte de todo.</div>
+      <input class="ld-input" type="text" placeholder="Nombre y Apellidos*" disabled>
+      <input class="ld-input" type="email" placeholder="Email*" disabled>
+      <div class="ld-inputs-row">
+        <input class="ld-input" type="tel" placeholder="Teléfono*" disabled style="margin-bottom:0;">
+        <input class="ld-input" type="text" placeholder="Fecha de nacimiento*" disabled style="margin-bottom:0;">
+      </div>
+      <div class="ld-check" style="margin-top:.6rem;"><input type="checkbox" disabled><label>He leído y acepto la <a href="#">Política de Privacidad</a> y la <a href="#">Política de Protección de Datos</a></label></div>
+      <div class="ld-check"><input type="checkbox" disabled><label>Autorizo para que TRIBBU me informe sobre promociones y campañas.</label></div>
+      <button class="ld-submit">Quiero sumarme</button>
+    </div>
   </div>
+
+  <!-- QUE ES LA TRIBBU -->
+  <div class="ld-sec">
+    <div class="ld-sec-title">¿Qué es LA TRIBBU?</div>
+    <div class="ld-sec-desc">LA TRIBBU es la comunidad donde se comparte mucho más que el coche. Se comparten momentos, recompensas exclusivas, ventajas en tus marcas favoritas y experiencias únicas para quienes están cambiando la forma de moverse. Porque aprovechar los asientos vacíos tiene recompensa. Y moverse juntos, aún más.</div>
+  </div>
+  <div class="ld-benefits">
+    <div class="ld-benefit">
+      <div class="ld-benefit-icon">🎁</div>
+      <div class="ld-benefit-title">Recompensas</div>
+      <div class="ld-benefit-desc">Descuentos y ventajas en marcas que sí forman parte de tu día a día. Menos gasto, más disfrutar del camino.</div>
+    </div>
+    <div class="ld-benefit">
+      <div class="ld-benefit-icon">⭐</div>
+      <div class="ld-benefit-title">Acceso a lo grande</div>
+      <div class="ld-benefit-desc">Accede antes que nadie a experiencias, ofertas y oportunidades pensadas para la gente que se mueve diferente.</div>
+    </div>
+    <div class="ld-benefit">
+      <div class="ld-benefit-icon">❤️</div>
+      <div class="ld-benefit-title">Juntos se disfruta más</div>
+      <div class="ld-benefit-desc">Eventos, planes y experiencias para conectar con personas como tú. Porque cuando el camino se comparte, todo se disfruta más.</div>
+    </div>
+  </div>
+
+  <!-- PERK TAXDOWN -->
+  <div class="ld-perk">
+    <div class="ld-perk-logo">📊</div>
+    <div class="ld-perk-body">
+      <div class="ld-perk-brand">TaxDown · Exclusivo LA TRIBBU</div>
+      <div class="ld-perk-title">Tu declaración de la renta, en modo fácil.</div>
+      <div class="ld-perk-desc">Hacer la declaración da pereza; hacerla pagando de más, duele. Déjalo en manos de expertos, optimiza tu devolución y recupera lo que es tuyo. <strong>15% de descuento directo en tu declaración.</strong></div>
+      <div class="ld-perk-tag">Válido hasta el 30 de junio.</div>
+    </div>
+    <button class="ld-perk-cta">Saber más</button>
+  </div>
+
+  <!-- VIDEOS -->
+  <div class="ld-videos-sec">
+    <div class="ld-sec-title">Lo que pasa fuera del coche</div>
+    <div class="ld-sec-desc">LA TRIBBU no es un club virtual, es asfalto, experiencias y gente de verdad. Revive nuestros últimos encuentros y echa un ojo a la agenda para ser el primero en apuntarte al próximo plan.</div>
+
+    <div class="ld-videos">
+      <div class="ld-video"><div class="ld-video-icon">▶️</div><div class="ld-video-lbl">Reel Instagram #1</div></div>
+      <div class="ld-video"><div class="ld-video-icon">▶️</div><div class="ld-video-lbl">Reel Instagram #2</div></div>
+      <div class="ld-video"><div class="ld-video-icon">▶️</div><div class="ld-video-lbl">Reel Instagram #3</div></div>
+      <div class="ld-video"><div class="ld-video-icon">▶️</div><div class="ld-video-lbl">Reel Instagram #4</div></div>
+    </div>
+  </div>
+
+  <!-- CTA FINAL -->
+  <div class="ld-cta">
+    <div>
+      <div class="ld-cta-title">Compartir coche es solo el principio.</div>
+      <div class="ld-cta-desc">TRIBBU va de personas ayudando a personas a moverse mejor. Disfrutamos el trayecto, conectamos con desconocidos y construimos algo más grande entre todos. Únete a LA TRIBBU y apúntate a nuestra newsletter para recibir las mejores recompensas, planes y ventajas directamente en tu bandeja.</div>
+    </div>
+    <div class="ld-cta-form">
+      <input class="ld-cta-input" type="email" placeholder="Tu email" disabled>
+      <div class="ld-cta-check"><input type="checkbox" disabled style="accent-color:var(--rosa);"><label>He leído y acepto la <a href="#">Política de Privacidad</a> y los <a href="#">Términos y Condiciones</a></label></div>
+      <button class="ld-cta-submit">Únete a LA TRIBBU</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="ld-footer">
+    <div>
+      <div class="ld-footer-logo">tribbu<span>.</span></div>
+      <div class="ld-footer-copy">© 2026 TRIBBU. All rights reserved.</div>
+      <div class="ld-footer-socials">
+        <span class="ld-footer-social">TikTok</span>
+        <span class="ld-footer-social">Instagram</span>
+        <span class="ld-footer-social">LinkedIn</span>
+      </div>
+    </div>
+    <div>
+      <div class="ld-footer-col-title">Cómo funciona</div>
+      <span class="ld-footer-link">Conductor</span>
+      <span class="ld-footer-link">Pasajero</span>
+      <span class="ld-footer-link">Empresa</span>
+    </div>
+    <div>
+      <div class="ld-footer-col-title">La TRIBBU</div>
+      <span class="ld-footer-link">Sala de Prensa</span>
+      <span class="ld-footer-link">BBlog</span>
+      <span class="ld-footer-link">Conócenos</span>
+    </div>
+    <div>
+      <div class="ld-footer-col-title">Legal</div>
+      <span class="ld-footer-link">Política de privacidad</span>
+      <span class="ld-footer-link">Política de cookies</span>
+      <span class="ld-footer-link">Política de seguridad</span>
+    </div>
+  </div>
+
+  <!-- ACCESO DIRECTO -->
+  <a href="https://www.tribbuapp.com/la-tribbu" target="_blank" class="ld-access">
+    <div class="ld-access-inner">
+      <div class="ld-access-emoji">🌐</div>
+      <div class="ld-access-title">Abrir la landing real en nueva pestaña</div>
+      <div class="ld-access-url">tribbuapp.com/la-tribbu</div>
+      <div class="ld-access-btn">Ver la landing real →</div>
+    </div>
+  </a>
+
+</div>
 </div>
 
 </div>
@@ -717,6 +932,7 @@ document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',
   pg.classList.add('on');
   if(b.dataset.p==='matriz') renderMatriz();
   if(b.dataset.p==='rec') renderRec();
+  if(b.dataset.p==='onboarding') renderOnboarding();
 }));
 
 renderDnav();
@@ -761,7 +977,7 @@ const obFlows={
     ]},
     {l:'Fase 2 — Registro en el formulario',c:'ph2',rows:[
       {cols:[
-        {i:'✍️',t:'Rellena el formulario',d:'Nombre · Teléfono · Fecha (opt.)',k:'normal',det:'Formulario: Nombre, Teléfono (campo principal, sin email como requisito), Fecha de nacimiento (opcional). Checkboxes: política de privacidad (obligatorio) y consentimiento de marketing (opcional).'},
+        {i:'✍️',t:'Rellena el formulario',d:'Nombre · Email · Teléfono · Fecha de nacimiento',k:'normal',det:'Formulario real de la landing: Nombre y Apellidos, Email, Teléfono (obligatorio) y Fecha de nacimiento (obligatorio). Checkboxes: política de privacidad (obligatorio) y consentimiento de marketing (opcional). Botón: Quiero sumarme.'},
         {i:'✅',t:'"Quiero sumarme"',d:'CTA del formulario',k:'highlight',det:'Botón principal: "Quiero sumarme". Al pulsarlo el usuario queda registrado en LA TRIBBU y accede a todos los perks y eventos.'},
       ]},
     ]},
@@ -806,6 +1022,22 @@ const obFlows={
 };
 
 function escOb(s){return s.replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+function flattenFlow(fk){
+  const flow=obFlows[fk];
+  const steps=[];
+  flow.phases.forEach(ph=>{
+    steps.push({type:'phase',label:ph.l,cls:ph.c});
+    ph.rows.forEach(row=>{
+      if(row.branch){
+        steps.push({type:'branch',left:row.left,right:row.right});
+      } else {
+        row.cols.forEach(col=>steps.push({type:'step',col}));
+      }
+    });
+  });
+  return steps;
+}
 
 function flattenFlow(fk){
   const flow=obFlows[fk];
@@ -888,7 +1120,7 @@ function renderObFlow(fk){
 }
 
 function renderOnboarding(){
-  ['A','B','C'].forEach(fk=>{ if(!document.getElementById('ob-steps-'+fk).hasChildNodes()) renderObFlow(fk); });
+  ['A','B'].forEach(fk=>{ const el=document.getElementById('ob-steps-'+fk); if(el&&!el.hasChildNodes()) renderObFlow(fk); });
 }
 
 document.querySelectorAll('.obt').forEach(btn=>{
